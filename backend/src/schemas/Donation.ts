@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, model } from "mongoose";
 
-interface IDonation extends Document {
+export interface IDonation extends Document {
   user: mongoose.Schema.Types.ObjectId;
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
