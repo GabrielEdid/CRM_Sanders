@@ -8,6 +8,10 @@ import {
 
 import { Request, Response } from "express";
 import Donation from "../schemas/Donation";
+import {
+  CreateDonationInput,
+  UpdateDonationInput,
+} from "../validation/donations";
 
 const getDonationsHandler = async (req: Request, res: Response) => {
   try {
@@ -32,9 +36,16 @@ const getDonationHandler = async (req: Request, res: Response) => {
   }
 };
 
-const createDonationHandler = async (req: Request, res: Response) => {
+const createDonationHandler = async (
+  req: Request<{}, {}, CreateDonationInput["body"]>,
+  res: Response
+) => {
   try {
-    const newDonation = await createDonation(req.body);
+    const body = req.body;
+    const newDonation = await createDonation({
+      ...body,
+      user: "66cf628f0415ed3809f87a71",
+    });
     await newDonation.save();
     res.status(201).json(newDonation);
   } catch (error) {
@@ -42,14 +53,31 @@ const createDonationHandler = async (req: Request, res: Response) => {
   }
 };
 
-const updateDonationHandler = async (req: Request, res: Response) => {
+const updateDonationHandler = async (
+  req: Request<UpdateDonationInput["params"]>,
+  res: Response
+) => {
   try {
-    const updatedDonation = await updateDonation(req.params.id, req.body);
-    if (updatedDonation) {
-      res.status(200).json(updatedDonation);
-    } else {
-      res.status(404).json({ error: "Donación no encontrada" });
+    const userId = res.locals.user._id;
+
+    const donationId = req.params.donationId;
+    const update = req.body;
+
+    const donation = await getDonation(donationId);
+
+    if (!donation) {
+      return res.status(404).json({ error: "Donación no encontrada" });
     }
+
+    if (String(donation.user) !== userId) {
+      return res
+        .status(403)
+        .json({ error: "No tienes permiso para actualizar esta donación" });
+    }
+
+    const updatedDonation = await updateDonation(donationId, update);
+
+    return res.status(200).json(updatedDonation);
   } catch (error) {
     res.status(500).json({ message: "Error al actualizar la donación" });
   }

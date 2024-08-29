@@ -1,5 +1,9 @@
 import Donation from "../schemas/Donation";
-import { IDonation } from "../schemas/Donation";
+import DonationModel, {
+  DonationInput,
+  DonationDocument,
+} from "../schemas/Donation";
+import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 
 const getDonations = async () => {
   return await Donation.find();
@@ -9,11 +13,11 @@ const getDonation = async (id: string) => {
   return await Donation.findById(id);
 };
 
-const createDonation = async (donation: IDonation) => {
+const createDonation = async (donation: DonationInput) => {
   return await Donation.create(donation);
 };
 
-const updateDonation = async (id: string, donation: IDonation) => {
+const updateDonation = async (id: string, donation: DonationInput) => {
   return await Donation.findByIdAndUpdate(id, donation, { new: true });
 };
 

@@ -1,6 +1,18 @@
 import mongoose, { Schema, Document, model } from "mongoose";
 
-export interface IUser extends Document {
+export interface UserInput {
+  username: string;
+  email: string;
+  password: string;
+  role: "usuario" | "admin";
+}
+
+export interface UserDocument extends UserInput, Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/* export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
@@ -8,9 +20,9 @@ export interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   toJSON: () => Omit<IUser, "password">; // Método para ocultar la contraseña al convertir a JSON
-}
+} */
 
-const userSchema: Schema<IUser> = new Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     required: [true, "El nombre de usuario es obligatorio"],
@@ -45,7 +57,7 @@ const userSchema: Schema<IUser> = new Schema({
   },
 });
 
-userSchema.pre<IUser>("save", function (next) {
+userSchema.pre("save", function (next) {
   this.updatedAt = new Date();
   next();
 });
@@ -60,5 +72,6 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-const User = model<IUser>("User", userSchema);
-export default User;
+const UserModel = model<UserDocument>("User", userSchema);
+
+export default UserModel;

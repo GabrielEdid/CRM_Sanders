@@ -8,11 +8,22 @@ import {
   deleteDonationHandler,
 } from "../controllers/donations";
 
+import validateResource from "../middleware/validateResource";
+
+import {
+  updateDonationSchema,
+  createDonationSchema,
+} from "../validation/donations";
+
 const donationsRouter = Router();
 
 donationsRouter.get("/", getDonationsHandler);
 donationsRouter.get("/:id", getDonationHandler);
-donationsRouter.post("/", createDonationHandler);
+donationsRouter.post(
+  "/",
+  [validateResource(createDonationSchema)],
+  createDonationHandler
+);
 donationsRouter.put("/:id", updateDonationHandler);
 donationsRouter.delete("/:id", deleteDonationHandler);
 

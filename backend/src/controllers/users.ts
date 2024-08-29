@@ -8,6 +8,8 @@ import {
 
 import { Request, Response } from "express";
 
+import { CreateUserInput } from "../validation/users";
+
 const getUsersHandler = async (req: Request, res: Response) => {
   try {
     const users = await getUsers();
@@ -20,7 +22,7 @@ const getUsersHandler = async (req: Request, res: Response) => {
 
 const getUserHandler = async (req: Request, res: Response) => {
   try {
-    const user = await getUser(req.params.id);
+    const user = await getUser({ _id: req.params.id });
     if (user) {
       res.status(200).json(user);
     } else {
@@ -31,8 +33,21 @@ const getUserHandler = async (req: Request, res: Response) => {
   }
 };
 
-const createUserHandler = async (req: Request, res: Response) => {
+const createUserHandler = async (
+  req: Request<{}, {}, CreateUserInput["body"]>,
+  res: Response
+) => {
   try {
+    const { username, email } = req.body;
+    const existingUser = await getUser({ $or: [{ username }, { email }] });
+
+    if (existingUser) {
+      return res.status(409).json({
+        error:
+          "Usuario ya existe con ese nombre de usuario o correo electrónico",
+      });
+    }
+
     const newUser = await createUser(req.body);
     await newUser.save();
     res.status(201).json(newUser);

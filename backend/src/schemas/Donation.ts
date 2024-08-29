@@ -1,4 +1,12 @@
 import mongoose, { Schema, Document, model } from "mongoose";
+import { UserDocument } from "./User";
+
+export interface DonationInput {
+  user: UserDocument["_id"];
+  amount: number;
+  paymentMethod: "stripe" | "cash" | "transfer";
+  message?: string;
+}
 
 export interface IDonation extends Document {
   user: mongoose.Schema.Types.ObjectId;
@@ -8,7 +16,12 @@ export interface IDonation extends Document {
   createdAt: Date;
 }
 
-const donationSchema: Schema<IDonation> = new Schema({
+export interface DonationDocument extends DonationInput, mongoose.Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const donationSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -37,6 +50,10 @@ const donationSchema: Schema<IDonation> = new Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 donationSchema.methods.toJSON = function () {
@@ -47,5 +64,9 @@ donationSchema.methods.toJSON = function () {
   return obj;
 };
 
-const Donation = model<IDonation>("Donation", donationSchema);
-export default Donation;
+const DonationModel = mongoose.model<DonationDocument>(
+  "Donation",
+  donationSchema
+);
+
+export default DonationModel;
