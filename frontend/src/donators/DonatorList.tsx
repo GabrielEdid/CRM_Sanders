@@ -13,19 +13,19 @@ import {
 import { ImageList } from "./GridList";
 
 import { Stack } from "@mui/material";
-import { DonationEmpty } from "./DonationEmpty";
+import { DonationEmpty } from "./DonatorEmpty";
 
-export const DonationList = () => {
+export const DonatorList = () => {
   const { identity } = useGetIdentity();
   if (!identity) return null;
   return (
     <ListBase perPage={25} sort={{ field: "name", order: "ASC" }}>
-      <DonationListLayout />
+      <DonatorListLayout />
     </ListBase>
   );
 };
 
-const DonationListLayout = () => {
+const DonatorListLayout = () => {
   const { data, isPending, filterValues } = useListContext();
   const hasFilters = filterValues && Object.keys(filterValues).length > 0;
 
@@ -37,7 +37,7 @@ const DonationListLayout = () => {
       {/* <DonationListFilter /> */}
       <Stack sx={{ width: "100%" }}>
         <Title title={"Companies"} />
-        <ListToolbar actions={<DonationListActions />} />
+        <ListToolbar actions={<DonatorListActions />} />
         <ImageList />
         <Pagination rowsPerPageOptions={[10, 25, 50, 100]} />
       </Stack>
@@ -45,13 +45,13 @@ const DonationListLayout = () => {
   );
 };
 
-const DonationListActions = () => {
+const DonatorListActions = () => {
   return (
     <TopToolbar>
       <ExportButton />
       <CreateButton
         variant="contained"
-        label="New Donation"
+        label="Nuevo Donador"
         sx={{ marginLeft: 2 }}
       />
     </TopToolbar>

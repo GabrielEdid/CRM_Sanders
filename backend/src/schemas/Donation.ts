@@ -1,15 +1,15 @@
 import mongoose, { Schema, Document, model } from "mongoose";
-import { UserDocument } from "./User";
+import { DonatorDocument } from "./Donator";
 
 export interface DonationInput {
-  user: UserDocument["_id"];
+  donator: DonatorDocument["_id"];
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
   message?: string;
 }
 
 export interface IDonation extends Document {
-  user: mongoose.Schema.Types.ObjectId;
+  donator: mongoose.Schema.Types.ObjectId;
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
   message?: string;
@@ -22,9 +22,9 @@ export interface DonationDocument extends DonationInput, mongoose.Document {
 }
 
 const donationSchema = new Schema({
-  user: {
+  donator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Donator",
     required: true,
   },
   amount: {

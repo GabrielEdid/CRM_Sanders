@@ -10,16 +10,9 @@ import https from "https"; // Biblioteca para crear servidores HTTPS
 
 import { Request, Response } from "express";
 
-// Esquemas de Mongoose
-
-import User from "./schemas/User";
-import Budget from "./schemas/Budget";
-import Donation from "./schemas/Donation";
-import Email from "./schemas/Email";
-import GenericEmail from "./schemas/GenericEmail";
-
 import { donationsRouter } from "./routes/donations";
 import { usersRouter } from "./routes/users";
+import { donatorsRouter } from "./routes/donators";
 
 // Crea la aplicación de Express
 const app = express();
@@ -45,6 +38,7 @@ app.use(express.json());
 
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/donators", donatorsRouter);
 
 // GET Users
 // app.get("/api/v1/users", async (req: Request, res: Response) => {

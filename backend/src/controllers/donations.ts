@@ -44,7 +44,7 @@ const createDonationHandler = async (
     const body = req.body;
     const newDonation = await createDonation({
       ...body,
-      user: "66cf628f0415ed3809f87a71",
+      donator: "66d4d3f327a2bee788b2ec70",
     });
     await newDonation.save();
     res.status(201).json(newDonation);
@@ -58,8 +58,6 @@ const updateDonationHandler = async (
   res: Response
 ) => {
   try {
-    const userId = res.locals.user._id;
-
     const donationId = req.params.donationId;
     const update = req.body;
 
@@ -67,12 +65,6 @@ const updateDonationHandler = async (
 
     if (!donation) {
       return res.status(404).json({ error: "Donación no encontrada" });
-    }
-
-    if (String(donation.user) !== userId) {
-      return res
-        .status(403)
-        .json({ error: "No tienes permiso para actualizar esta donación" });
     }
 
     const updatedDonation = await updateDonation(donationId, update);
