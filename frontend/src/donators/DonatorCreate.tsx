@@ -7,6 +7,7 @@ export const DonatorCreate = () => (
     <SimpleForm>
       <TextInput source="name" />
       <TextInput source="email" validate={validateEmail} />
+      <TextInput source="phone" />
     </SimpleForm>
   </Create>
 );

@@ -3,6 +3,7 @@ import { RecordContextProvider, useListContext } from "react-admin";
 
 import { DonatorCard } from "./DonatorCard";
 import { Donation } from "../types";
+import { Link } from "react-router-dom";
 
 const times = (nbChildren: number, fn: (key: number) => any) =>
   Array.from({ length: nbChildren }, (_, key) => fn(key));
@@ -38,7 +39,12 @@ const LoadedGridList = () => {
     >
       {data.map((record) => (
         <RecordContextProvider key={record.id} value={record}>
-          <DonatorCard />
+          <Link
+            to={`/donators/${record.id}/show`}
+            style={{ textDecoration: "none" }}
+          >
+            <DonatorCard />
+          </Link>
         </RecordContextProvider>
       ))}
 

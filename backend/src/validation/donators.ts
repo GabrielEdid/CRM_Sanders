@@ -12,6 +12,11 @@ const payload = {
         required_error: "El correo es requerido",
       })
       .email("El correo no es válido"),
+    phone: z
+      .string({
+        required_error: "El teléfono  es requerido",
+      })
+      .min(1, "El teléfono tiene que tener al menos 1 caracter"),
   }),
 };
 

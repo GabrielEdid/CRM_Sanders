@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface DonatorInput {
   name: string;
   email: string;
+  phone: string;
 }
 
 export interface DonatorDocument extends DonatorInput, mongoose.Document {
@@ -22,6 +23,10 @@ const donatorSchema = new Schema({
     trim: true,
     lowercase: true,
     match: [/\S+@\S+\.\S+/, "El correo electrónico es inválido"],
+  },
+  phone: {
+    type: String,
+    required: [true, "El teléfono es obligatorio"],
   },
   createdAt: {
     type: Date,

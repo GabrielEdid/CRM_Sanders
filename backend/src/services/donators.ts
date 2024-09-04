@@ -26,6 +26,7 @@ const getDonators = async () => {
         id: 1,
         name: 1,
         email: 1,
+        phone: 1,
         totalDonations: 1,
         totalAmountDonated: 1,
         createdAt: 1,

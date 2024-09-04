@@ -10,6 +10,7 @@ export type Donator = {
   id: string;
   name: string;
   email: string;
+  phone: string;
   totalDonations: number;
   totalAmountDonated: number;
 };

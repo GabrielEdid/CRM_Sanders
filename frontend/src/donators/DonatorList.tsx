@@ -34,7 +34,6 @@ const DonatorListLayout = () => {
 
   return (
     <Stack direction="row" component="div">
-      {/* <DonationListFilter /> */}
       <Stack sx={{ width: "100%" }}>
         <Title title={"Companies"} />
         <ListToolbar actions={<DonatorListActions />} />

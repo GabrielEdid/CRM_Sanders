@@ -17,7 +17,7 @@ export const DonatorCard = (props: { record?: Donator }) => {
   return (
     <Link
       to={createPath({
-        resource: "companies",
+        resource: "donators",
         id: record.id,
         type: "show",
       })}
