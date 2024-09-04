@@ -49,6 +49,7 @@ const authProvider: AuthProvider = {
       })
       .then((auth) => {
         localStorage.setItem("auth", JSON.stringify(auth));
+        window.location.href = "/donators";
       })
       .catch(() => {
         throw new Error("Network error");
@@ -66,8 +67,9 @@ const authProvider: AuthProvider = {
     localStorage.getItem("auth")
       ? Promise.resolve()
       : Promise.reject({ message: "login.required" }),
-  logout: () => {
+  logout: (params?: any) => {
     localStorage.removeItem("auth");
+    // window.location.href = "/";
     return Promise.resolve();
   },
   getIdentity: () => {

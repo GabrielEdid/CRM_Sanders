@@ -41,7 +41,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    authProvider.logout().then(() => {
+    authProvider.logout("").then(() => {
       // Redirige o actualiza el estado después del logout
       window.location.href = "/login"; // Por ejemplo, redirigir al login
     });
