@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import {
   getUser,
   getUsers,
@@ -9,6 +10,7 @@ import {
 import { Request, Response } from "express";
 
 import { CreateUserInput } from "../validation/users";
+const secretKey = process.env.SECRET_KEY || "";
 
 const getUsersHandler = async (req: Request, res: Response) => {
   try {
@@ -30,6 +32,48 @@ const getUserHandler = async (req: Request, res: Response) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Error al obtener el usuario" });
+  }
+};
+
+const loginHandler = async (req: Request, res: Response) => {
+  try {
+    const username = req.body.username;
+    const password = req.body.password;
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ message: "Es necesario introducir usuario y contraseña" });
+    }
+    const user = await getUser({ username: username, password: password });
+    console.log("usuario:", user);
+    if (user) {
+      const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
+      console.log("token:", token);
+      return res.status(200).json({ token });
+    } else {
+      res.status(404).json({ error: "Usuario y/o contraseña incorrectos" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener el usuario" });
+  }
+};
+
+const verifyToken = (
+  req: Request & { username?: string },
+  res: Response,
+  next: any
+) => {
+  const header = req.header("Authorization") || "";
+  const token = header.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Token not provied" });
+  }
+  try {
+    const payload = jwt.verify(token, secretKey!) as jwt.JwtPayload;
+    req.username = payload.username;
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: "Token not valid" });
   }
 };
 
@@ -88,4 +132,5 @@ export {
   createUserHandler,
   updateUserHandler,
   deleteUserHandler,
+  loginHandler,
 };

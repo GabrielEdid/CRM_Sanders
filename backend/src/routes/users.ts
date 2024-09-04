@@ -6,6 +6,7 @@ import {
   createUserHandler,
   updateUserHandler,
   deleteUserHandler,
+  loginHandler,
 } from "../controllers/users";
 
 import validateResource from "../middleware/validateResource";
@@ -17,6 +18,7 @@ const usersRouter = Router();
 usersRouter.get("/", getUsersHandler);
 usersRouter.get("/:id", getUserHandler);
 usersRouter.post("/", validateResource(createUserSchema), createUserHandler);
+usersRouter.post("/login", loginHandler);
 usersRouter.put("/:id", updateUserHandler);
 usersRouter.delete("/:id", deleteUserHandler);
 

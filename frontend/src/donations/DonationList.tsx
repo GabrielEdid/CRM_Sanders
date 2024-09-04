@@ -19,7 +19,11 @@ export const DonationList = () => {
   const { identity } = useGetIdentity();
   if (!identity) return null;
   return (
-    <ListBase perPage={25} sort={{ field: "name", order: "ASC" }}>
+    <ListBase
+      perPage={25}
+      sort={{ field: "name", order: "ASC" }}
+      disableAuthentication
+    >
       <DonationListLayout />
     </ListBase>
   );
