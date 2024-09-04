@@ -12,16 +12,6 @@ export interface UserDocument extends UserInput, Document {
   updatedAt: Date;
 }
 
-/* export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  role: "usuario" | "admin";
-  createdAt: Date;
-  updatedAt: Date;
-  toJSON: () => Omit<IUser, "password">; // Método para ocultar la contraseña al convertir a JSON
-} */
-
 const userSchema = new Schema({
   username: {
     type: String,
@@ -31,7 +21,6 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: [true, "El correo electrónico es obligatorio"],
     unique: true,
     trim: true,
     lowercase: true,

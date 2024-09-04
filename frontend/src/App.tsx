@@ -11,19 +11,21 @@ import {
   defaultDarkTheme,
 } from "react-admin"; // Componentes principales de React-Admin
 import { deepmerge } from "@mui/utils";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./layout/Layout";
 
 import donators from "./donators";
 
 import jsonServerProvider from "ra-data-json-server"; // Proveedor de datos para conectarse a una API RESTful
+import authProvider from "./authProvider";
 
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
 // Configura el proveedor de datos para conectarse a la API del backend
-//const dataProvider = jsonServerProvider('http://localhost:5001/api');
-const dataProvider = jsonServerProvider("http://localhost:5001/api/v1"); // Usa HTTPS en lugar de HTTP
+const dataProvider = jsonServerProvider(`http://localhost:5001/api/v1`);
+// const dataProvider = jsonServerProvider(`http://localhost:3000/api/v1`);  // marcos
 
 // // Componente para crear un nuevo post
 // const PostCreate: React.FC<CreateProps> = (props) => (
@@ -37,27 +39,31 @@ const dataProvider = jsonServerProvider("http://localhost:5001/api/v1"); // Usa 
 
 // Componente principal de la aplicación
 const App = () => (
-  <Admin
-    dataProvider={dataProvider}
-    layout={Layout}
-    theme={lightTheme}
-    darkTheme={darkTheme}
-    defaultTheme="light"
-  >
-    {/* <Resource
-      name="posts" // Nombre del recurso que coincide con la colección en MongoDB
-      list={ListGuesser} // Componente para listar los posts
-      edit={EditGuesser} // Componente para editar un post
-      create={PostCreate} // Componente para crear un nuevo post
-    /> */}
-    <Resource
-      name="users" // Nombre del recurso que coincide con la colección en MongoDB
-      list={ListGuesser} // Componente para listar los posts
-      edit={EditGuesser} // Componente para editar un post
-    />
+  <Router>
+    <Routes>
+      <Route path="/" element={<div>Hacer todo lo de usuarios</div>} />
+      <Route path="/register" element={<div>Hola</div>} />
+      <Route path="/donate" element={<div>Haz tu donativo!!</div>} />
 
-    <Resource name="donators" {...donators} />
-  </Admin>
+      {/* Rutas protegidas por React Admin */}
+      <Route
+        path="/*"
+        element={
+          <Admin
+            authProvider={authProvider}
+            dataProvider={dataProvider}
+            layout={Layout}
+            theme={lightTheme}
+            darkTheme={darkTheme}
+            defaultTheme="light"
+          >
+            <Resource name="users" list={ListGuesser} edit={EditGuesser} />
+            <Resource name="donators" {...donators} />
+          </Admin>
+        }
+      />
+    </Routes>
+  </Router>
 );
 
 export default App;
