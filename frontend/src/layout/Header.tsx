@@ -69,11 +69,12 @@ const Header = () => {
                 textColor="inherit"
               >
                 <Tab label={"Dashboard"} component={Link} to="/" value="/" />
+
                 <Tab
                   label={"Donadores"}
                   component={Link}
-                  to="/donations"
-                  value="/donations"
+                  to="/donators"
+                  value="/donators"
                 />
               </Tabs>
             </Box>

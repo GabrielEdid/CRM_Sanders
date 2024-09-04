@@ -2,15 +2,26 @@
 
 // Bibliotecas necesarias de React y React-Admin
 
-import { Admin, Resource, ListGuesser, EditGuesser } from "react-admin"; // Componentes principales de React-Admin
+import {
+  Admin,
+  Resource,
+  ListGuesser,
+  EditGuesser,
+  defaultLightTheme,
+  defaultDarkTheme,
+} from "react-admin"; // Componentes principales de React-Admin
+import { deepmerge } from "@mui/utils";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./layout/Layout";
 
-import donations from "./donations";
+import donators from "./donators";
 
 import jsonServerProvider from "ra-data-json-server"; // Proveedor de datos para conectarse a una API RESTful
 import authProvider from "./authProvider";
+
+const lightTheme = defaultLightTheme;
+const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
 // Configura el proveedor de datos para conectarse a la API del backend
 const dataProvider = jsonServerProvider("http://localhost:5001/api/v1"); // Usa HTTPS en lugar de HTTP
@@ -41,9 +52,12 @@ const App = () => (
             authProvider={authProvider}
             dataProvider={dataProvider}
             layout={Layout}
+            theme={lightTheme}
+            darkTheme={darkTheme}
+            defaultTheme="light"
           >
             <Resource name="users" list={ListGuesser} edit={EditGuesser} />
-            <Resource name="donations" {...donations} list={ListGuesser} />
+            <Resource name="donators" {...donators} />
           </Admin>
         }
       />

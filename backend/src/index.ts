@@ -12,6 +12,7 @@ import { Request, Response } from "express";
 
 import { donationsRouter } from "./routes/donations";
 import { usersRouter } from "./routes/users";
+import { donatorsRouter } from "./routes/donators";
 
 // Crea la aplicación de Express
 const app = express();
@@ -37,6 +38,7 @@ app.use(express.json());
 
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/donators", donatorsRouter);
 
 // Ruta para probar el backend en el navegador
 app.get("/", (req: Request, res: Response) => {

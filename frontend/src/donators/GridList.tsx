@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { RecordContextProvider, useListContext } from "react-admin";
 
-import { DonationCard } from "./DonationCard";
+import { DonatorCard } from "./DonatorCard";
 import { Donation } from "../types";
 
 const times = (nbChildren: number, fn: (key: number) => any) =>
@@ -34,15 +34,15 @@ const LoadedGridList = () => {
       width="100%"
       gap={1}
       display="grid"
-      gridTemplateColumns="repeat(auto-fill, minmax(180px, 1fr))"
+      gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
     >
       {data.map((record) => (
         <RecordContextProvider key={record.id} value={record}>
-          <DonationCard />
+          <DonatorCard />
         </RecordContextProvider>
       ))}
 
-      {data.length === 0 && <Typography p={2}>No hay donaciones</Typography>}
+      {data.length === 0 && <Typography p={2}>No hay donadores</Typography>}
     </Box>
   );
 };
