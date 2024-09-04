@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 5001;
 app.use(
   cors({
     // Permite que cualquier origen pueda acceder a la API
-    exposedHeaders: ["Admin Sanders"], // Expone el encabezado X-Total-Count
+    exposedHeaders: ["X-Total-Count"], // Expone el encabezado X-Total-Count
   })
 );
 

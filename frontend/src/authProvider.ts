@@ -9,7 +9,7 @@ const authProvider: AuthProvider = {
     password: string;
   }) => {
     const request = new Request(
-      process.env.API_URL + "/api/v1/auth/register" ||
+      process.env.REACT_APP_API_URL + "/api/v1/auth/register" ||
         "http://localhost:3000/api/v1/users/register",
       {
         method: "POST",

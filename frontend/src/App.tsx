@@ -24,7 +24,8 @@ const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
 // Configura el proveedor de datos para conectarse a la API del backend
-const dataProvider = jsonServerProvider("http://localhost:5001/api/v1"); // Usa HTTPS en lugar de HTTP
+const dataProvider = jsonServerProvider(`http://localhost:5001/api/v1`);
+// const dataProvider = jsonServerProvider(`http://localhost:3000/api/v1`);  // marcos
 
 // // Componente para crear un nuevo post
 // const PostCreate: React.FC<CreateProps> = (props) => (
