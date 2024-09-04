@@ -10,7 +10,7 @@ const authProvider: AuthProvider = {
   }) => {
     const request = new Request(
       process.env.REACT_APP_API_URL + "/api/v1/auth/register" ||
-        "http://localhost:3000/api/v1/users/register",
+        "http://localhost:5001/api/v1/users/register",
       {
         method: "POST",
         body: JSON.stringify({ username, password }),
@@ -32,7 +32,7 @@ const authProvider: AuthProvider = {
       });
   },
   login: ({ username, password }) => {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000";
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5001";
     const request = new Request(apiUrl + "/api/v1/users/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),

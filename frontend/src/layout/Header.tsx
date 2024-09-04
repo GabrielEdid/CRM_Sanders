@@ -25,6 +25,7 @@ import {
   useUserMenu,
 } from "react-admin";
 import { Link, matchPath, useLocation } from "react-router-dom";
+import authProvider from "../authProvider";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,6 +38,13 @@ const Header = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    authProvider.logout().then(() => {
+      // Redirige o actualiza el estado después del logout
+      window.location.href = "/login"; // Por ejemplo, redirigir al login
+    });
   };
 
   let currentPath: string = location.hash
@@ -144,7 +152,7 @@ const Header = () => {
                 </ListItemIcon>
                 <ListItemText>Refresh</ListItemText>
               </MenuItem>
-              <MenuItem onClick={() => {}}>
+              <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
