@@ -10,6 +10,7 @@ import {
 import { Request, Response } from "express";
 
 import { CreateUserInput } from "../validation/users";
+import { MailService } from "../services/nodeMailer";
 const secretKey = process.env.SECRET_KEY || "";
 
 const getUsersHandler = async (req: Request, res: Response) => {
@@ -31,7 +32,7 @@ const getUserHandler = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Usuario no encontrada" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener el usuario" });
+    res.status(500).json({ message: "Error al obtener el usuario por su Id" });
   }
 };
 
@@ -130,6 +131,22 @@ const deleteUserHandler = async (req: Request, res: Response) => {
   }
 };
 
+const emailSender = async (req: Request, res: Response) => {
+  const emailMessage = "<h1> Hola desde nodeMailer </h1>";
+  const receiver = "diegoabdov@gmail.com";
+  const subject = "NodeMailer Test 1";
+
+  console.log("Enviando email");
+
+  const emailService = new MailService();
+  const sent: boolean = await emailService.send({
+    message: emailMessage,
+    to: receiver,
+    subject,
+  });
+  res.status(200).json({ message: "Email enviado" });
+};
+
 export {
   getUserHandler,
   getUsersHandler,
@@ -137,4 +154,5 @@ export {
   updateUserHandler,
   deleteUserHandler,
   loginHandler,
+  emailSender,
 };
