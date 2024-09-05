@@ -1,7 +1,3 @@
-//Este código debe de ir en src/App.js dentro de la carpeta de frontend
-
-// Bibliotecas necesarias de React y React-Admin
-
 import {
   Admin,
   Resource,
@@ -9,35 +5,21 @@ import {
   EditGuesser,
   defaultLightTheme,
   defaultDarkTheme,
-} from "react-admin"; // Componentes principales de React-Admin
+} from "react-admin";
 import { deepmerge } from "@mui/utils";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./layout/Layout";
-
 import donators from "./donators";
-
-import jsonServerProvider from "ra-data-json-server"; // Proveedor de datos para conectarse a una API RESTful
+import jsonServerProvider from "ra-data-json-server";
 import authProvider from "./authProvider";
+import CustomLogin from "./CustomLogin"; // Import the custom login page
 
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
-// Configura el proveedor de datos para conectarse a la API del backend
 const dataProvider = jsonServerProvider(`http://localhost:5001/api/v1`);
-// const dataProvider = jsonServerProvider(`http://localhost:3000/api/v1`);  // marcos
 
-// // Componente para crear un nuevo post
-// const PostCreate: React.FC<CreateProps> = (props) => (
-//   <Create {...props}>
-//     <SimpleForm>
-//       <TextInput source="title" /> {/* Campo para el título del post */}
-//       <TextInput source="content" /> {/* Campo para el contenido del post */}
-//     </SimpleForm>
-//   </Create>
-// );
-
-// Componente principal de la aplicación
 const App = () => (
   <Router>
     <Routes>
@@ -45,7 +27,7 @@ const App = () => (
       <Route path="/register" element={<div>Hola</div>} />
       <Route path="/donate" element={<div>Haz tu donativo!!</div>} />
 
-      {/* Rutas protegidas por React Admin */}
+      {/* Protected React Admin Routes */}
       <Route
         path="/*"
         element={
@@ -56,6 +38,7 @@ const App = () => (
             theme={lightTheme}
             darkTheme={darkTheme}
             defaultTheme="light"
+            loginPage={CustomLogin} // Use the custom login page here
           >
             <Resource name="users" list={ListGuesser} edit={EditGuesser} />
             <Resource name="donators" {...donators} />
