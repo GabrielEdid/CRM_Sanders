@@ -38,7 +38,6 @@ const authProvider: AuthProvider = {
       body: JSON.stringify({ username, password }),
       headers: new Headers({ "Content-Type": "application/json" }),
     });
-    console.log("variable de entrono:", process.env.REACT_APP_API_URL);
     console.log(request);
     return fetch(request)
       .then((response) => {

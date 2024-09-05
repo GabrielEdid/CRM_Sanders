@@ -48,8 +48,12 @@ const loginHandler = async (req: Request, res: Response) => {
     console.log("usuario:", user);
     if (user) {
       const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
-      console.log("token:", token);
-      return res.status(200).json({ token });
+      const tokenJson = {
+        token: token,
+        username: user.username,
+      };
+      console.log("token:", tokenJson);
+      return res.status(200).json(tokenJson);
     } else {
       res.status(404).json({ error: "Usuario y/o contraseña incorrectos" });
     }
