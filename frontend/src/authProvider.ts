@@ -48,7 +48,7 @@ const authProvider: AuthProvider = {
       })
       .then((auth) => {
         localStorage.setItem("auth", JSON.stringify(auth));
-        window.location.href = "/donators";
+        window.location.href = "/users";
       })
       .catch(() => {
         throw new Error("Network error");
