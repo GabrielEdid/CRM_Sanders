@@ -47,15 +47,19 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Configuración de HTTPS
-// const options = {
-//     key: fs.readFileSync('server.key'), // Lee la llave privada del servidor
-//     cert: fs.readFileSync('server.crt')  // Lee el certificado del servidor
-// };
+
+// Cargar los certificados SSL
+const privateKey = fs.readFileSync("../certs/server.key", "utf8"); // Lee la llave privada del servidor desde el sistema de archivos
+const certificate = fs.readFileSync("../certs/server.crt", "utf8"); // Lee el certificado público del servidor desde el sistema de archivos
+const ca = fs.readFileSync("../certs/ca.crt", "utf8"); // Lee el certificado raíz de la CA desde el sistema de archivos
+
+// Configuración de las credenciales SSL para el servidor HTTPS
+const credentials = { key: privateKey, cert: certificate, ca: ca };
 
 // Inicia el servidor HTTPS
-// https.createServer(options, app).listen(PORT, () => {
-//     console.log(`Server running on https://localhost:${PORT}`); // Mensaje de confirmación con el protocolo HTTPS
-// });
+https.createServer(credentials, app).listen(PORT, () => {
+  console.log(`Server running on https://localhost:${PORT}`); // Mensaje de confirmación con el protocolo HTTPS
+});
 
-// Inicia el servidor escuchando en el puerto especificado
-app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+// Inicia el servidor en HTTP escuchando en el puerto especificado
+// app.listen(PORT, () => console.log(`http://localhost:${PORT}`));

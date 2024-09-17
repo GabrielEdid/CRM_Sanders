@@ -46,14 +46,14 @@ const loginHandler = async (req: Request, res: Response) => {
         .json({ message: "Es necesario introducir usuario y contraseña" });
     }
     const user = await getUser({ username: username, password: password });
-    console.log("usuario:", user);
+    // console.log("usuario:", user);
     if (user) {
       const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
       const tokenJson = {
         token: token,
         username: user.username,
       };
-      console.log("token:", tokenJson);
+      // console.log("token:", tokenJson);
       return res.status(200).json(tokenJson);
     } else {
       res.status(404).json({ error: "Usuario y/o contraseña incorrectos" });
@@ -136,7 +136,7 @@ const emailSender = async (req: Request, res: Response) => {
   const receiver = "diegoabdov@gmail.com";
   const subject = "NodeMailer Test 1";
 
-  console.log("Enviando email");
+  // console.log("Enviando email");
 
   const emailService = new MailService();
   const sent: boolean = await emailService.send({

@@ -9,8 +9,8 @@ const authProvider: AuthProvider = {
     password: string;
   }) => {
     const request = new Request(
-      process.env.REACT_APP_API_URL + "/api/v1/auth/register" ||
-        "http://localhost:5001/api/v1/users/register",
+      import.meta.env.VITE_API_URL + "/api/v1/auth/register" ||
+        "https://localhost:5001/api/v1/users/register",
       {
         method: "POST",
         body: JSON.stringify({ username, password }),
@@ -32,13 +32,12 @@ const authProvider: AuthProvider = {
       });
   },
   login: ({ username, password }) => {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5001";
+    const apiUrl = import.meta.env.VITE_API_URL || "https://localhost:5001"; //
     const request = new Request(apiUrl + "/api/v1/users/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),
       headers: new Headers({ "Content-Type": "application/json" }),
     });
-    console.log(request);
     return fetch(request)
       .then((response) => {
         if (response.status < 200 || response.status >= 300) {
