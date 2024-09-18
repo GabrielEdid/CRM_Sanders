@@ -10,7 +10,7 @@ const authProvider: AuthProvider = {
   }) => {
     const request = new Request(
       import.meta.env.VITE_API_URL + "/api/v1/auth/register" ||
-        "https://localhost:5001/api/v1/users/register",
+        "http://localhost:5001/api/v1/users/register",
       {
         method: "POST",
         body: JSON.stringify({ username, password }),
@@ -32,7 +32,7 @@ const authProvider: AuthProvider = {
       });
   },
   login: ({ username, password }) => {
-    const apiUrl = import.meta.env.VITE_API_URL || "https://localhost:5001"; //
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5001"; //
     const request = new Request(apiUrl + "/api/v1/users/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),

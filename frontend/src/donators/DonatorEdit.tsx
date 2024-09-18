@@ -1,12 +1,11 @@
-import { Edit, Form, TextInput, email } from "react-admin";
-
-const validateEmail = email();
+import { Edit, SimpleForm, TextInput } from "react-admin";
 
 export const DonatorEdit = () => (
-  <Edit redirect="show">
-    <Form>
-      <TextInput source="name" />
-      <TextInput source="email" validate={validateEmail} />
-    </Form>
+  <Edit>
+    <SimpleForm>
+      <TextInput source="name" label="Nombre" fullWidth />
+      <TextInput source="email" label="Correo" fullWidth />
+      <TextInput source="phone" label="Número de Teléfono" fullWidth />
+    </SimpleForm>
   </Edit>
 );

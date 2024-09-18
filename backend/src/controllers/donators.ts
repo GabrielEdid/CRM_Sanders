@@ -41,9 +41,11 @@ const createDonatorHandler = async (
     const newDonator = await createDonator({
       ...body,
     });
+    console.log(newDonator);
     await newDonator.save();
     res.status(201).json(newDonator);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error al crear al donador" });
   }
 };
@@ -53,9 +55,8 @@ const updateDonatorHandler = async (
   res: Response
 ) => {
   try {
-    const userId = res.locals.user._id;
-
-    const donatorId = req.params.donatorId;
+    const donatorId = req.params.id;
+    console.log(req.params);
     const update = req.body;
 
     const donator = await getDonator(donatorId);
@@ -68,6 +69,7 @@ const updateDonatorHandler = async (
 
     return res.status(200).json(updatedDonator);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error al actualizar el donador" });
   }
 };

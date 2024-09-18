@@ -1,5 +1,10 @@
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
-import { ShowBase, TabbedShowLayout, useShowContext } from "react-admin";
+import {
+  ShowBase,
+  TabbedShowLayout,
+  useShowContext,
+  EditButton,
+} from "react-admin";
 import { Donator } from "../types";
 
 export const DonatorShow = () => (
@@ -22,6 +27,7 @@ const DonatorShowContent = () => {
               <Typography variant="h5" ml={2} flex="1">
                 {record.name}
               </Typography>
+              <EditButton label="Edit" sx={{ marginLeft: "auto" }} />
             </Box>
 
             <TabbedShowLayout>

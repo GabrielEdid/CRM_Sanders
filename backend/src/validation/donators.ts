@@ -22,7 +22,7 @@ const payload = {
 
 const params = {
   params: z.object({
-    donatorId: z.string({
+    id: z.string({
       required_error: "donatorId is required",
     }),
   }),

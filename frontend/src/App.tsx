@@ -18,7 +18,7 @@ import CustomLogin from "./CustomLogin"; // Import the custom login page
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
-const dataProvider = jsonServerProvider(`https://localhost:5001/api/v1`);
+const dataProvider = jsonServerProvider(`http://localhost:5001/api/v1`);
 
 const App = () => (
   <Router>
