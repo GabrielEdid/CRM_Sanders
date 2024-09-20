@@ -27,11 +27,11 @@ const DonatorShowContent = () => {
               <Typography variant="h5" ml={2} flex="1">
                 {record.name}
               </Typography>
-              <EditButton label="Edit" sx={{ marginLeft: "auto" }} />
+              <EditButton label="Editar" sx={{ marginLeft: "auto" }} />
             </Box>
 
             <TabbedShowLayout>
-              <TabbedShowLayout.Tab label="Details">
+              <TabbedShowLayout.Tab label="Detalles">
                 <Stack spacing={2} p={2}>
                   <Typography variant="body1">
                     <strong>Nombre:</strong> {record.name}
@@ -45,7 +45,7 @@ const DonatorShowContent = () => {
                 </Stack>
               </TabbedShowLayout.Tab>
 
-              <TabbedShowLayout.Tab label="Donations">
+              <TabbedShowLayout.Tab label="Donaciones">
                 Hello
               </TabbedShowLayout.Tab>
             </TabbedShowLayout>

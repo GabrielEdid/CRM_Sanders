@@ -13,6 +13,8 @@ import { CreateUserInput } from "../validation/users";
 import { MailService } from "../services/nodeMailer";
 const secretKey = process.env.SECRET_KEY || "";
 
+const bcrypt = require("bcrypt");
+
 const getUsersHandler = async (req: Request, res: Response) => {
   try {
     const users = await getUsers();
@@ -45,18 +47,27 @@ const loginHandler = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "Es necesario introducir usuario y contraseña" });
     }
-    const user = await getUser({ username: username, password: password });
-    // console.log("usuario:", user);
+    const user = await getUser({ username: username });
+
     if (user) {
-      const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
-      const tokenJson = {
-        token: token,
-        username: user.username,
-      };
-      // console.log("token:", tokenJson);
-      return res.status(200).json(tokenJson);
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      console.log(password);
+
+      if (passwordMatch) {
+        const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
+        const tokenJson = {
+          token: token,
+          username: user.username,
+        };
+
+        return res.status(200).json(tokenJson);
+      } else {
+        return res
+          .status(401)
+          .json({ message: "Usuario y/o contraseña incorrectos" });
+      }
     } else {
-      res.status(404).json({ error: "Usuario y/o contraseña incorrectos" });
+      res.status(404).json({ error: "Usuario no encontrado" });
     }
   } catch (error) {
     res.status(500).json({ message: "Error al obtener el usuario" });

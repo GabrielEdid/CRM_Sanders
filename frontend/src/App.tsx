@@ -15,6 +15,8 @@ import jsonServerProvider from "ra-data-json-server";
 import authProvider from "./authProvider";
 import CustomLogin from "./CustomLogin"; // Import the custom login page
 
+import { i18nProvider } from "./i18nprovider";
+
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
@@ -36,12 +38,22 @@ const App = () => (
             dataProvider={dataProvider}
             layout={Layout}
             theme={lightTheme}
+            i18nProvider={i18nProvider}
             darkTheme={darkTheme}
             defaultTheme="light"
             loginPage={CustomLogin} // Use the custom login page here
           >
-            <Resource name="users" list={ListGuesser} edit={EditGuesser} />
-            <Resource name="donators" {...donators} />
+            <Resource
+              name="users"
+              list={ListGuesser}
+              edit={EditGuesser}
+              options={{ label: "Usuarios" }}
+            />
+            <Resource
+              name="donators"
+              {...donators}
+              options={{ label: "Donadores" }}
+            />
           </Admin>
         }
       />

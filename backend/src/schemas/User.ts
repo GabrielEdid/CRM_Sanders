@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, model } from "mongoose";
+const bcrypt = require("bcrypt");
 
 export interface UserInput {
   username: string;
@@ -46,8 +47,22 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.pre("save", function (next) {
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password") || this.isNew) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(this.password, salt);
+      this.password = hashedPassword;
+    } catch (error) {
+      if (error instanceof Error) {
+        return next(error);
+      }
+      return next(new Error("An unknown error occurred"));
+    }
+  }
+
   this.updatedAt = new Date();
+
   next();
 });
 
