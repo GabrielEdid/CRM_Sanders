@@ -1,0 +1,102 @@
+.landingContainer {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #f0f8ff; /* Azul claro */
+  padding: 0;
+  margin: 0;
+}
+
+.navbar {
+  background-color: #004080; /* Azul oscuro */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navLinks {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+.navLinks a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.heroSection {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: rgb(80, 123, 217); /* Azul intermedio */
+  color: white;
+}
+
+.heroTitle {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.heroSubtitle {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.heroButton {
+  background-color: whitesmoke;
+  color: #004080;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+ 
+  text-align: left;
+  padding: 40px 20px;
+}
+
+.infoSection img {
+  max-width: 400px; 
+  border-radius: 10px;
+  margin: 0;
+}
+
+.textContent {
+  max-width: 500px;
+  margin-left: 10px; 
+}
+
+.donationsSection {
+  background-color: #e6f2ff; 
+}
+
+.donateButton {
+  background-color: whitesmoke; 
+  color: #004080;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.footer {
+  background-color: #004080;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+
