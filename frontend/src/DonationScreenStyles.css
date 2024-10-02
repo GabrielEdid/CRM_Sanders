@@ -1,0 +1,78 @@
+.cancelContainer {
+  text-align: center;
+  padding: 50px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  width: 50%;
+  margin: 100px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cancelContainer h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.cancelContainer p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.cancelContainer button {
+  background-color: #721c24;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancelContainer button:hover {
+  background-color: #501118;
+}
+
+.successContainer {
+  text-align: center;
+  padding: 50px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 10px;
+  width: 70%;
+  margin: 50px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.successContainer h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.successContainer p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.successContainer .sessionId {
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+.successContainer button {
+  background-color: #155724;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.successContainer button:hover {
+  background-color: #0f3e17;
+}
