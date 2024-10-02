@@ -48,7 +48,7 @@ const Landing: React.FC = () => {
       }
 
       const stripe = await loadStripe(
-        "pk_test_51Q4tUmKFn5yEUyQdrzZb2KqYszXKnxGTGyE7jIBmr05yApnA3jUvT7No0yrQeTgmetrBlRumpPFf5uRTlosbkqQT00X3WY6LHX"
+        "pk_test_51Q5ad0GyaQDHPtc7o5doiVK2aeP5CkolWLeYKHWvpic4At3c3yHG3cIGPC5ejMD3xaCpyVaW8f83nAMAiOIODEHd00EFSvMKYd"
       );
 
       if (!stripe) {
