@@ -26,7 +26,7 @@ const dataProvider = jsonServerProvider(`http://localhost:5001/api/v1`);
 const App = () => (
   <Router>
     <Routes>
-    <Route path="/landing" element={<Landing />} />
+    <Route path="/" element={<Landing />} />
       <Route path="/" element={<div>Hacer todo lo de usuarios</div>} />
       <Route path="/register" element={<div>Hola</div>} />
       <Route path="/donate" element={<div>Haz tu donativo!!</div>} />
