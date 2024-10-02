@@ -12,6 +12,7 @@ import {
   CreateDonationInput,
   UpdateDonationInput,
 } from "../validation/donations";
+import DonatorModel from "../schemas/Donator"; // Assuming you have a Donator model
 
 const getDonationsHandler = async (req: Request, res: Response) => {
   try {
@@ -43,11 +44,18 @@ const createDonationHandler = async (
 ) => {
   try {
     const body = req.body;
-    const newDonation = await createDonation({
+    const donator = await DonatorModel.findById("66d4d3f327a2bee788b2ec70");
+    if (!donator) {
+      return res.status(404).json({ message: "Donator not found" });
+    }
+
+    const newDonation = await Donation.create({
       ...body,
     });
+
     await newDonation.save();
     res.status(201).json(newDonation);
+    console.log("Donación creada");
   } catch (error) {
     res.status(500).json({ message: "Error al crear la donación" });
   }

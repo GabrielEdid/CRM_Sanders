@@ -2,7 +2,9 @@ import mongoose, { Schema, Document, model } from "mongoose";
 import { DonatorDocument } from "./Donator";
 
 export interface DonationInput {
-  donator: DonatorDocument["_id"];
+  donator: {
+    email: string;
+  };
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
   message?: string;
@@ -16,7 +18,7 @@ export interface IDonation extends Document {
   createdAt: Date;
 }
 
-export interface DonationDocument extends DonationInput, mongoose.Document {
+export interface DonationDocument extends DonationInput, Document {
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,17 +31,11 @@ const donationSchema = new Schema({
   },
   amount: {
     type: Number,
-    required: [true, "La cantidad es obligatoria"],
-    validate: {
-      validator: function (value: number) {
-        return value > 0; // Valida que el valor sea mayor que 0
-      },
-      message: "La cantidad debe ser un número positivo",
-    },
+    required: true,
   },
   paymentMethod: {
     type: String,
-    required: [true, "El método de pago es obligatorio"],
+    required: true,
     enum: ["stripe", "cash", "transfer"],
   },
   message: {
@@ -68,5 +64,4 @@ const DonationModel = mongoose.model<DonationDocument>(
   "Donation",
   donationSchema
 );
-
 export default DonationModel;
