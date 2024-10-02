@@ -138,6 +138,22 @@ const Header = () => {
                 borderRadius: 2,
               }}
             />
+            <Tab
+              label="Presupuestos"
+              component={Link}
+              to="/budgets"
+              value="/budgets"
+              sx={{
+                fontFamily: "Fraunces, serif",
+                textTransform: "none",
+                fontSize: { xs: 14, sm: 18, md: 22 },
+                padding: { xs: "6px", sm: "8px", md: "12px" },
+                backgroundColor:
+                  currentPath === "/budgets" ? "#ffffff30" : "transparent",
+                color: currentPath === "/budgets" ? "#ffffff" : "inherit",
+                borderRadius: 2,
+              }}
+            />
           </Tabs>
 
           {/* Icono de configuración más pequeño */}

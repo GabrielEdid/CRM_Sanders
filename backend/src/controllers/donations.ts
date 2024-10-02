@@ -15,7 +15,8 @@ import {
 
 const getDonationsHandler = async (req: Request, res: Response) => {
   try {
-    const donations = await getDonations();
+    const { donator } = req.query;
+    const donations = await getDonations(donator ? { donator } : {});
     res.set("X-Total-Count", donations.length.toString());
     res.status(200).json(donations);
   } catch (error) {
@@ -44,7 +45,6 @@ const createDonationHandler = async (
     const body = req.body;
     const newDonation = await createDonation({
       ...body,
-      donator: "66d4d3f327a2bee788b2ec70",
     });
     await newDonation.save();
     res.status(201).json(newDonation);
@@ -58,7 +58,7 @@ const updateDonationHandler = async (
   res: Response
 ) => {
   try {
-    const donationId = req.params.donationId;
+    const donationId = req.params.id;
     const update = req.body;
 
     const donation = await getDonation(donationId);

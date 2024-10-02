@@ -5,8 +5,8 @@ import DonationModel, {
 } from "../schemas/Donation";
 import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 
-const getDonations = async () => {
-  return await Donation.find();
+const getDonations = async (filter = {}) => {
+  return await Donation.find(filter);
 };
 
 const getDonation = async (id: string) => {

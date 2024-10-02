@@ -13,6 +13,7 @@ import { Request, Response } from "express";
 import { donationsRouter } from "./routes/donations";
 import { usersRouter } from "./routes/users";
 import { donatorsRouter } from "./routes/donators";
+import { budgetsRouter } from "./routes/budgets";
 import { MailService } from "./services/nodeMailer";
 
 // Crea la aplicación de Express
@@ -40,6 +41,7 @@ app.use(express.json());
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/donators", donatorsRouter);
+app.use("/api/v1/budgets", budgetsRouter);
 
 // Ruta para probar el backend en el navegador
 app.get("/", (req: Request, res: Response) => {

@@ -8,48 +8,35 @@ import {
   Title,
   ListToolbar,
   useListContext,
-  TextInput,
 } from "react-admin";
 
 import { ImageList } from "./GridList";
 
 import { Stack } from "@mui/material";
-import { DonationEmpty } from "./DonatorEmpty";
-import { DonatorListFilter } from "./DonatorListFilter";
-const DonatorFilters = [
-  <TextInput label="Buscar por nombre" source="name" alwaysOn key="1" />,
-];
+import { BudgetEmpty } from "./BudgetEmpty";
 
-export const DonatorList = () => {
+export const BudgetList = () => {
   const { identity } = useGetIdentity();
   if (!identity) return null;
   return (
-    <ListBase
-      perPage={25}
-      sort={{ field: "name", order: "ASC" }}
-      filterDefaultValues={{ name: "" }}
-    >
-      <DonatorListLayout />
+    <ListBase perPage={25} sort={{ field: "name", order: "ASC" }}>
+      <BudgetListLayout />
     </ListBase>
   );
 };
 
-const DonatorListLayout = () => {
+const BudgetListLayout = () => {
   const { data, isPending, filterValues } = useListContext();
   const hasFilters = filterValues && Object.keys(filterValues).length > 0;
 
   if (isPending) return null;
-  if (!data?.length && !hasFilters) return <DonationEmpty />;
+  if (!data?.length && !hasFilters) return <BudgetEmpty />;
 
   return (
     <Stack direction="row" component="div" marginTop={5}>
-      <DonatorListFilter />
       <Stack sx={{ width: "100%" }}>
         <Title title={"Companies"} />
-        <ListToolbar
-          filters={DonatorFilters}
-          actions={<DonatorListActions />}
-        />
+        <ListToolbar actions={<BudgetListActions />} />
         <ImageList />
         <Pagination rowsPerPageOptions={[10, 25, 50, 100]} />
       </Stack>
@@ -57,13 +44,13 @@ const DonatorListLayout = () => {
   );
 };
 
-const DonatorListActions = () => {
+const BudgetListActions = () => {
   return (
     <TopToolbar>
       <ExportButton />
       <CreateButton
         variant="contained"
-        label="Nuevo Donador"
+        label="Nuevo Presupuesto"
         sx={{ marginLeft: 2 }}
       />
     </TopToolbar>

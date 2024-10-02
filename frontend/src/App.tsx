@@ -11,6 +11,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./layout/Layout";
 import donators from "./donators";
+import donations from "./donations";
+import budgets from "./budgets";
 import jsonServerProvider from "ra-data-json-server";
 import authProvider from "./authProvider";
 import CustomLogin from "./CustomLogin"; // Import the custom login page
@@ -53,6 +55,16 @@ const App = () => (
               name="donators"
               {...donators}
               options={{ label: "Donadores" }}
+            />
+            <Resource
+              name="donations"
+              {...donations}
+              options={{ label: "Donaciones" }}
+            />
+            <Resource
+              name="budgets"
+              {...budgets}
+              options={{ label: "Presupuestos" }}
             />
           </Admin>
         }

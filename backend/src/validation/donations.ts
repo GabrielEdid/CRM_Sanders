@@ -14,12 +14,15 @@ const payload = {
       .string()
       .min(1, { message: "El mensaje debe tener mínimo un cáracter" })
       .optional(),
+    donator: z.string({
+      required_error: "El donador es obligatorio",
+    }),
   }),
 };
 
 const params = {
   params: z.object({
-    donationId: z.string({
+    id: z.string({
       required_error: "donationId is required",
     }),
   }),
