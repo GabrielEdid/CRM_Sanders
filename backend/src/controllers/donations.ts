@@ -12,6 +12,9 @@ import {
   CreateDonationInput,
   UpdateDonationInput,
 } from "../validation/donations";
+import { donationHtmlTemplate } from "../services/emailTemplateService";
+import { sendMail } from "../services/nodeMailerService";
+import { attachments } from "../types/donationEmail";
 
 const getDonationsHandler = async (req: Request, res: Response) => {
   try {
@@ -47,6 +50,41 @@ const createDonationHandler = async (
       donator: "66d4d3f327a2bee788b2ec70",
     });
     await newDonation.save();
+
+    // `Hola, ${
+    //   newDonation?.donator?.name! || ""
+    // } <br />De parte de la Fundación Sanders agradecemos mucho tu donación.`,
+
+    // validar con donator.isSendEmails antes de mandar el correo
+
+    const htmlEmail = await donationHtmlTemplate(
+      `Hola<br />De parte de la Fundación Sanders agradecemos mucho tu donación.`,
+      "headerArticle1",
+      "bodyArticle1",
+      "headerArticle2",
+      "bodyArticle2",
+      "stat1",
+      "descriptionStat1",
+      "stat2",
+      "descriptionStat2",
+      "stat3",
+      "descriptionStat3",
+      "headerArticle3",
+      "bodyArticle3"
+    );
+
+    if (!htmlEmail) {
+      return res.status(500).json({ message: "Error al crear el correo" });
+    }
+
+    await sendMail({
+      subject: "¡Gracias por tu donación!",
+      html: htmlEmail,
+      // to: [newDonation?.donator?.email!],
+      to: ["marcosdm0404@gmail.com"],
+      attachments: attachments,
+    });
+
     res.status(201).json(newDonation);
   } catch (error) {
     res.status(500).json({ message: "Error al crear la donación" });
