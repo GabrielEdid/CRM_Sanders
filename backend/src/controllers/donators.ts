@@ -9,9 +9,25 @@ import {
 import { Request, Response } from "express";
 import { CreateDonatorInput, UpdateDonatorInput } from "../validation/donators";
 
-const getDonatorsHandler = async (req: Request, res: Response) => {
+interface DonatorQuery {
+  name?: string;
+  "lastDonationDate@gte"?: string;
+  "lastDonationDate@lte"?: string;
+}
+
+const getDonatorsHandler = async (
+  req: Request<{}, {}, {}, DonatorQuery>,
+  res: Response
+) => {
   try {
-    const donators = await getDonators();
+    const {
+      name,
+      "lastDonationDate@gte": lastDonationGte,
+      "lastDonationDate@lte": lastDonationLte,
+    } = req.query;
+
+    // Pass the query parameters to the getDonators service
+    const donators = await getDonators(name, lastDonationGte, lastDonationLte);
     res.set("X-Total-Count", donators.length.toString());
     res.status(200).json(donators);
   } catch (error) {

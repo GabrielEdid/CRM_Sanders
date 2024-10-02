@@ -5,9 +5,9 @@ const validateEmail = email();
 export const DonatorCreate = () => (
   <Create>
     <SimpleForm>
-      <TextInput source="name" />
-      <TextInput source="email" validate={validateEmail} />
-      <TextInput source="phone" />
+      <TextInput source="name" label="Nombre" />
+      <TextInput source="email" validate={validateEmail} label="Correo" />
+      <TextInput source="phone" label="Teléfono" />
     </SimpleForm>
   </Create>
 );

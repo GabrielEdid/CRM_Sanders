@@ -13,4 +13,15 @@ export type Donator = {
   phone: string;
   totalDonations: number;
   totalAmountDonated: number;
+  lastDonationDate: Date;
+};
+
+export type Budget = {
+  id: string;
+  title: string;
+  totalAmountInCentsMXN: number;
+  collectedAmountInCentsMXN: number;
+  description: string;
+  startDate: Date;
+  endDate: Date;
 };

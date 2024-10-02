@@ -1,4 +1,4 @@
-//Este código debe de ir en el archiovo index.js dentro de la carpeta de backend
+//Este código debe de ir en el archiavo index.js dentro de la carpeta de backend
 
 // Bibliotecas necesarias para iniciar
 require("dotenv").config(); // Carga variables de entorno desde un archivo .env
@@ -14,18 +14,24 @@ import { donationsRouter } from "./routes/donations";
 import { usersRouter } from "./routes/users";
 import { donatorsRouter } from "./routes/donators";
 
+import { budgetsRouter } from "./routes/budgets";
+import { stripeRouter } from "./routes/stripe";
+import { webhookRouter } from "./routes/webhook"; // Import the new webhook router
+
 // Crea la aplicación de Express
 const app = express();
 // Define el puerto en el que correrá el servidor (toma de la variable de entorno: 5001, o por defecto el puerto: 5000)
 const PORT = process.env.PORT || 5001;
 
-// Habilitar CORS para todas las solicitudes
+// Habilitar CORS para el frontend específico
 app.use(
   cors({
-    // Permite que cualquier origen pueda acceder a la API
-    exposedHeaders: ["X-Total-Count"], // Expone el encabezado X-Total-Count
+    origin: "http://localhost:5173", // Allow only the frontend at this origin
+    exposedHeaders: ["X-Total-Count"], // Exponer el encabezado X-Total-Count
   })
 );
+
+app.use("/webhook", webhookRouter);
 
 // Conexión a mongoDB
 mongoose
@@ -39,6 +45,8 @@ app.use(express.json());
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/donators", donatorsRouter);
+app.use("/api/v1/budgets", budgetsRouter);
+app.use("/api/v1/stripe", stripeRouter);
 
 // Ruta para probar el backend en el navegador
 app.get("/", (req: Request, res: Response) => {
