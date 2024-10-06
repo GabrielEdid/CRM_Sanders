@@ -9,12 +9,14 @@
     "format": "prettier --write ./src"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^4.6.0",
     "dotenv": "^16.4.5",
     "ra-data-json-server": "^5.1.0",
     "ra-i18n-polyglot": "^5.2.0",
     "react": "^18.3.0",
     "react-admin": "^5.1.0",
-    "react-dom": "^18.3.0"
+    "react-dom": "^18.3.0",
+    "stripe": "^17.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

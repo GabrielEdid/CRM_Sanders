@@ -2,38 +2,75 @@ import DonatorModel, { DonatorInput } from "../schemas/Donator";
 import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import DonationModel from "../schemas/Donation";
 
-const getDonators = async () => {
-  const donators = await DonatorModel.aggregate([
+const getDonators = async (
+  name?: string,
+  lastDonationGte?: string, // lastDonationDate >=
+  lastDonationLte?: string // lastDonationDate <=
+) => {
+  // Start building the aggregation pipeline
+  const aggregationPipeline: any[] = [
     {
+      // This stage will handle filtering based on the donator's name
+      $match: name ? { name: { $regex: name, $options: "i" } } : {},
+    },
+    {
+      // Lookup stage to join donations for each donator
       $lookup: {
-        from: "donations", // The name of the collection you want to join with
-        localField: "_id", // Field from the Donator collection
-        foreignField: "donator", // Field from the Donation collection
-        as: "donations", // The name of the field to be added with the joined data
+        from: "donations",
+        localField: "_id",
+        foreignField: "donator",
+        as: "donations",
       },
     },
     {
+      // Add calculated fields: total donations, total amount, and last donation date
       $addFields: {
-        totalDonations: { $size: "$donations" }, // Calculate the total number of donations
-        totalAmountDonated: { $sum: "$donations.amount" }, // Sum all donation amounts
+        totalDonations: { $size: "$donations" },
+        totalAmountDonated: { $sum: "$donations.amount" },
+        lastDonationDate: { $max: "$donations.createdAt" }, // Find the latest donation date
         id: "$_id",
       },
     },
-    {
-      $project: {
-        // Project only the necessary fields
-        _id: 0, // Exclude the original '_id' field
-        id: 1,
-        name: 1,
-        email: 1,
-        phone: 1,
-        totalDonations: 1,
-        totalAmountDonated: 1,
-        createdAt: 1,
-        updatedAt: 1,
+  ];
+
+  // Add filtering for donation date range, if provided
+  if (lastDonationGte || lastDonationLte) {
+    const donationDateQuery: any = {};
+
+    if (lastDonationGte) {
+      donationDateQuery.$gte = new Date(lastDonationGte);
+    }
+
+    if (lastDonationLte) {
+      donationDateQuery.$lte = new Date(lastDonationLte);
+    }
+
+    // Add a $match stage to filter based on last donation date
+    aggregationPipeline.push({
+      $match: {
+        lastDonationDate: donationDateQuery,
       },
+    });
+  }
+
+  // Final project stage to select the fields to return
+  aggregationPipeline.push({
+    $project: {
+      _id: 0,
+      id: 1,
+      name: 1,
+      email: 1,
+      phone: 1,
+      totalDonations: 1,
+      totalAmountDonated: 1,
+      lastDonationDate: 1,
+      createdAt: 1,
+      updatedAt: 1,
     },
-  ]);
+  });
+
+  // Execute the aggregation pipeline
+  const donators = await DonatorModel.aggregate(aggregationPipeline);
 
   return donators;
 };

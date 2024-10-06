@@ -12,10 +12,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./layout/Layout";
 import Landing from "./Landing";
 import donators from "./donators";
+import donations from "./donations";
+import budgets from "./budgets";
 import jsonServerProvider from "ra-data-json-server";
 import authProvider from "./authProvider";
 import CustomLogin from "./CustomLogin"; // Import the custom login page
-
+import DonationSuccess from "./DonationSuccess"; // Import the success page
+import DonationCancel from "./DonationCancel"; // Import the cancel page
 import { i18nProvider } from "./i18nprovider";
 
 const lightTheme = defaultLightTheme;
@@ -31,7 +34,9 @@ const App = () => (
       <Route path="/register" element={<div>Hola</div>} />
       <Route path="/donate" element={<div>Haz tu donativo!!</div>} />
 
-      {/* Protected React Admin Routes */}
+      <Route path="/donation-success" element={<DonationSuccess />} />
+      <Route path="/donation-canceled" element={<DonationCancel />} />
+
       <Route
         path="/*"
         element={
@@ -55,6 +60,16 @@ const App = () => (
               name="donators"
               {...donators}
               options={{ label: "Donadores" }}
+            />
+            <Resource
+              name="donations"
+              {...donations}
+              options={{ label: "Donaciones" }}
+            />
+            <Resource
+              name="budgets"
+              {...budgets}
+              options={{ label: "Presupuestos" }}
             />
           </Admin>
         }

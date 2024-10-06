@@ -1,16 +1,20 @@
 import mongoose, { Schema, Document, model } from "mongoose";
 
-interface IBudget extends Document {
+export interface BudgetInput {
   title: string;
   totalAmountInCentsMXN: number;
   collectedAmountInCentsMXN: number;
   description: string;
   startDate: Date;
   endDate: Date;
-  creationDate: Date;
 }
 
-const budgetSchema: Schema<IBudget> = new Schema({
+export interface BudgetDocument extends BudgetInput, mongoose.Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const budgetSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -21,6 +25,7 @@ const budgetSchema: Schema<IBudget> = new Schema({
   },
   collectedAmountInCentsMXN: {
     type: Number,
+    default: 0,
     required: true,
   },
   description: {
@@ -35,9 +40,13 @@ const budgetSchema: Schema<IBudget> = new Schema({
     type: Date,
     required: true,
   },
-  creationDate: {
+  createdAt: {
     type: Date,
-    required: true,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
@@ -49,5 +58,5 @@ budgetSchema.methods.toJSON = function () {
   return obj;
 };
 
-const Budget = model<IBudget>("Budget", budgetSchema);
+const Budget = mongoose.model<BudgetDocument>("Budget", budgetSchema);
 export default Budget;

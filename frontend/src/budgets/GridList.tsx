@@ -1,8 +1,8 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { RecordContextProvider, useListContext } from "react-admin";
 
-import { DonatorCard } from "./DonatorCard";
-import { Donation } from "../types";
+import { BudgetCard } from "./BudgetCard";
+import { Budget } from "../types";
 import { Link } from "react-router-dom";
 
 const times = (nbChildren: number, fn: (key: number) => any) =>
@@ -26,7 +26,7 @@ const LoadingGridList = () => (
 );
 
 const LoadedGridList = () => {
-  const { data, error, isPending } = useListContext<Donation>();
+  const { data, error, isPending } = useListContext<Budget>();
 
   if (isPending || error) return null;
 
@@ -35,25 +35,21 @@ const LoadedGridList = () => {
       width="100%"
       gap={1}
       display="grid"
-      gridTemplateColumns={{
-        xs: "repeat(1, 1fr)", // 1 column on small screens
-        sm: "repeat(2, 1fr)", // 2 columns on small to medium screens
-        md: "repeat(3, 1fr)", // 3 columns on medium and up
-      }}
+      gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
       mt={2}
     >
       {data.map((record) => (
         <RecordContextProvider key={record.id} value={record}>
           <Link
-            to={`/donators/${record.id}/show`}
+            to={`/budgets/${record.id}/show`}
             style={{ textDecoration: "none" }}
           >
-            <DonatorCard />
+            <BudgetCard />
           </Link>
         </RecordContextProvider>
       ))}
 
-      {data.length === 0 && <Typography p={2}>No hay donadores</Typography>}
+      {data.length === 0 && <Typography p={2}>No hay presupuestos</Typography>}
     </Box>
   );
 };

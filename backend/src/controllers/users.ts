@@ -10,7 +10,9 @@ import {
 import { Request, Response } from "express";
 
 import { CreateUserInput } from "../validation/users";
-import { MailService } from "../services/nodeMailer";
+import { sendMail } from "../services/nodeMailerService";
+import { donationHtmlTemplate } from "../services/emailTemplateService";
+import { attachments } from "../types/donationEmail";
 const secretKey = process.env.SECRET_KEY || "";
 
 const bcrypt = require("bcrypt");
@@ -143,17 +145,39 @@ const deleteUserHandler = async (req: Request, res: Response) => {
 };
 
 const emailSender = async (req: Request, res: Response) => {
-  const emailMessage = "<h1> Hola desde nodeMailer </h1>";
-  const receiver = "diegoabdov@gmail.com";
-  const subject = "NodeMailer Test 1";
+  const receivers = [
+    "diegoabdov@gmail.com",
+    "marcosdm0404@gmail.com",
+    "ishakalopaz@gmail.com",
+    "gabrieledid28@gmail.com",
+  ];
+  const subject = "¡Gracias por tu donación!";
 
-  // console.log("Enviando email");
+  const htmlEmail = await donationHtmlTemplate(
+    `Hola<br />De parte de la Fundación Sanders agradecemos mucho tu donación.`,
+    "headerArticle1",
+    "bodyArticle1",
+    "headerArticle2",
+    "bodyArticle2",
+    "stat1",
+    "descriptionStat1",
+    "stat2",
+    "descriptionStat2",
+    "stat3",
+    "descriptionStat3",
+    "headerArticle3",
+    "bodyArticle3"
+  );
 
-  const emailService = new MailService();
-  const sent: boolean = await emailService.send({
-    message: emailMessage,
-    to: receiver,
+  if (!htmlEmail) {
+    return res.status(500).json({ message: "Error al crear el correo" });
+  }
+
+  await sendMail({
     subject,
+    html: htmlEmail,
+    to: receivers,
+    attachments: attachments,
   });
   res.status(200).json({ message: "Email enviado" });
 };

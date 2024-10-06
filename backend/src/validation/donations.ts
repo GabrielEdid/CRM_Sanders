@@ -3,23 +3,26 @@ import { z, TypeOf } from "zod";
 const payload = {
   body: z.object({
     amount: z
-      .number({
-        required_error: "La cantidad es obligatoria",
-      })
+      .number({ required_error: "La cantidad es obligatoria" })
       .positive(),
     paymentMethod: z.enum(["stripe", "cash", "transfer"], {
       message: "El método de pago es obligatorio",
     }),
     message: z
       .string()
-      .min(1, { message: "El mensaje debe tener mínimo un cáracter" })
+      .min(1, "El mensaje debe tener al menos un carácter")
       .optional(),
+    donator: z
+      .object({
+        email: z.string().email("El correo electrónico no es válido"),
+      })
+      .required(),
   }),
 };
 
 const params = {
   params: z.object({
-    donationId: z.string({
+    id: z.string({
       required_error: "donationId is required",
     }),
   }),
