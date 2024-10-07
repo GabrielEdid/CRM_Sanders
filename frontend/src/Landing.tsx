@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import styles from "./Landing.module.css";
-import Logo from "./img/Logo.jpg";
+import Logo from "./img/Logo.png";
+import Logo_Sanders from "../assets/images/Logo_Sanders.jpeg";
 import Equipo from "./img/Equipo.jpeg";
 import Agua from "./img/Agua.jpg";
+import Donaciones from "./img/Donaciones.jpg";
 
-const Landing: React.FC = () => {
+const Landing = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [donationData, setDonationData] = useState({
@@ -48,11 +50,13 @@ const Landing: React.FC = () => {
       }
 
       const stripe = await loadStripe(
-        "pk_test_51Q4tUmKFn5yEUyQdrzZb2KqYszXKnxGTGyE7jIBmr05yApnA3jUvT7No0yrQeTgmetrBlRumpPFf5uRTlosbkqQT00X3WY6LHX"
+        "pk_test_51Q5ad0GyaQDHPtc7o5doiVK2aeP5CkolWLeYKHWvpic4At3c3yHG3cIGPC5ejMD3xaCpyVaW8f83nAMAiOIODEHd00EFSvMKYd"
       );
 
       if (!stripe) {
-        setErrorMessage("Failed to initialize Stripe. Please try again.");
+        setErrorMessage(
+          "Error al inicializar Stripe. Por favor, inténtalo de nuevo."
+        );
         setIsLoading(false);
         return;
       }
@@ -60,10 +64,14 @@ const Landing: React.FC = () => {
       const result = await stripe.redirectToCheckout({ sessionId });
 
       if (result.error) {
-        setErrorMessage(result.error.message);
+        setErrorMessage(
+          result.error.message ? result.error.message : "Ocurrió un error."
+        );
       }
     } catch (error) {
-      setErrorMessage("An unexpected error occurred. Please try again.");
+      setErrorMessage(
+        "Ocurrión un error inesperado. Por favor, inténtalo de nuevo."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -99,6 +107,11 @@ const Landing: React.FC = () => {
         <h1 className={styles.heroTitle}>
           ¡Bienvenido a la Fundación Sanders!
         </h1>
+        <img
+          src={Logo_Sanders}
+          alt="Nosotros"
+          className={styles.sectionImage}
+        />
         <p className={styles.heroSubtitle}>
           Nuestra misión es ayudar a los menos favorecidos a través de la
           tecnología y proveerles agua limpia.
@@ -113,38 +126,72 @@ const Landing: React.FC = () => {
         <div className={styles.textContent}>
           <h2>Nosotros</h2>
           <p>
-            En Fundación Sanders, creemos en el poder de la tecnología para
-            mejorar la calidad de vida de quienes más lo necesitan. Proveemos
-            agua limpia y oportunidades de educación.
+            Fundación Sanders A.C., es una Asociación Civil sin fines de lucro
+            creada en el año 2016 por iniciativa del empresario mexicano
+            Guillermo Sanders Acedo (1935-2019), para contribuir a la mejora de
+            la calidad de vida en grupos sociales en situación de
+            vulnerabilidad, mediante la promoción de la salud sexual y
+            reproductiva, la nutrición comunitaria y el abastecimiento de agua.
           </p>
         </div>
       </section>
 
       <section id="activities" className={styles.infoSection}>
-        <img src={Equipo} alt="Actividades" className={styles.sectionImage} />
         <div className={styles.textContent}>
           <h2>Actividades</h2>
+          <h1>TEC HIDALGO</h1>
           <p>
-            Ofrecemos talleres de robótica, impresión 3D y mucho más. ¡Únete a
-            nuestras actividades!
+            Tuvimos la oportunidad de platicar en HIDALMUN 2022 compartiendo con
+            alumnos, directivos y líderes sobre el surgimiento de Fundación
+            Sanders A. C.
           </p>
+          <h1>HIPGIVE</h1>
+          <p>
+            Es la plataforma de herramientas digitales de “Hispanics in
+            Philanthropy” que posibilita la movilización de recursos para
+            proyectos de impacto social en el continente americano.
+          </p>
+          <h1>INSTITUTO TLALPAN</h1>
+          <p>
+            Con el instituto Tlalpan llevamos a cabo programa con alumnos de 3°
+            de preparatoria.
+          </p>
+        </div>
+
+        <div className={styles.videoSection}>
+          <a
+            href="https://www.youtube.com/watch?v=G0igvtwkJv4&t=3s"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.videoLink}
+          >
+            Ver video en YouTube
+          </a>
+          <div className={styles.videoWrapper}>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/G0igvtwkJv4"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       </section>
 
       <section
         id="donations"
-        className={`${styles.infoSection} ${styles.reverse}`}
-        ref={donationSectionRef} // Reference to donation section
+        className={`${styles.infoSection}`}
+        ref={donationSectionRef}
       >
         <img src={Agua} alt="Donaciones" className={styles.sectionImage} />
         <div className={styles.textContent}>
           <h2>Donaciones</h2>
           <p>
             Con tu apoyo, podemos seguir llevando agua y educación a más niños.
-            ¡Haz tu donación hoy! <br />
-            Introduce el monto que deseas donar en pesos mexicanos (MXN).
+            ¡Haz tu donación hoy!
           </p>
-
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -190,10 +237,20 @@ const Landing: React.FC = () => {
       <section id="contact" className={styles.infoSection}>
         <div className={styles.textContent}>
           <h2>Contacto</h2>
+          <h1>DIRECCIÓN</h1>
           <p>
-            ¿Tienes preguntas? ¡Contáctanos y te responderemos lo antes posible!
+            Melchor Ocampo 193, Torre A, Piso 1, CP 11300 Col. Verónica Anzures
           </p>
+          <h1>TELÉFONO</h1>
+          <p>55 1707-6203</p>
+          <h1>CORREO</h1>
+          <p>contacto@sanders.com.mx</p>
         </div>
+        <img
+          src={Donaciones}
+          alt="Donaciones"
+          className={styles.sectionImage1}
+        />
       </section>
 
       <footer className={styles.footer}>

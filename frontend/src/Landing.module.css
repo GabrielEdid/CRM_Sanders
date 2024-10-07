@@ -1,13 +1,16 @@
 .landingContainer {
   font-family: "Arial", sans-serif;
   color: #333;
-  background-color: #f0f8ff; /* Azul claro */
-  padding: 0;
+  background-color: #f0f8ff;
   margin: 0;
+  background-image: url("./img/texture.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .navbar {
-  background-color: #004080; /* Azul oscuro */
+  background-color: #1859ad;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -18,6 +21,7 @@
   color: white;
   font-size: 24px;
   font-weight: bold;
+  font-family: "Fraunces, serif";
 }
 
 .navLinks {
@@ -32,15 +36,21 @@
   font-size: 16px;
 }
 
+.navLinks a:hover {
+  color: #f0f8ff;
+  text-decoration: underline;
+}
+
 .heroSection {
   text-align: center;
   padding: 50px 20px;
-  background-color: rgb(80, 123, 217); /* Azul intermedio */
+  background-color: #192459;
   color: white;
 }
 
 .heroTitle {
-  font-size: 48px;
+  font-size: 54px;
+  letter-spacing: 3px;
   margin-bottom: 20px;
 }
 
@@ -49,33 +59,97 @@
   margin-bottom: 30px;
 }
 
-.heroButton {
+.heroButton,
+.donateButton {
   background-color: whitesmoke;
   color: #004080;
-  border: none;
+  border: 2px solid #004080;
   padding: 15px 30px;
-  font-size: 18px;
+  font-size: 20px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.heroButton:hover,
+.donateButton:hover {
+  background-color: #004080;
+  color: whitesmoke;
+  border-color: whitesmoke;
 }
 
 .infoSection {
   display: flex;
   flex-direction: row;
   align-items: center;
-
   text-align: left;
   padding: 40px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-bottom: 60px;
+}
+
+.infoSection:nth-child(odd) {
+  background-color: #f7f9fc;
+}
+
+.infoSection:nth-child(even) {
+  background-color: #ffffff;
 }
 
 .infoSection img {
   max-width: 400px;
   border-radius: 10px;
-  margin: 0;
+  margin: 0 20px;
+  transition: transform 0.3s ease;
+}
+
+.infoSection1 img {
+  max-width: 600px;
+  border-radius: 10px;
+  margin: 0 20px;
+  transition: transform 0.3s ease;
+}
+
+.infoSection img:hover {
+  transform: scale(1.05);
 }
 
 .textContent {
   max-width: 500px;
   margin-left: 10px;
+  padding: 20px;
+}
+
+h2 {
+  font-size: 36px;
+  color: #004080;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+  .infoSection {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .textContent {
+    margin: 20px 0;
+  }
+
+  .infoSection img {
+    max-width: 100%;
+  }
+}
+
+.sectionDivider {
+  width: 80%;
+  height: 2px;
+  background-color: #d9d9d9;
+  margin: 40px auto;
 }
 
 .donationsSection {
@@ -92,11 +166,53 @@
 }
 
 .footer {
-  background-color: #004080;
+  background-color: #1859ad;
   color: white;
   text-align: center;
-  padding: 20px;
+  padding: 30px;
+}
+
+.videoSection {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
   margin-top: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.videoSection h2 {
+  font-size: 32px;
+  color: #004080;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.videoLink {
+  display: inline-block;
+  background-color: #1859ad;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.videoLink:hover {
+  background-color: #192459;
+}
+
+.videoWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.videoWrapper iframe {
+  border: 2px solid #004080;
+  border-radius: 10px;
 }
 
 /* General input styling */
@@ -120,7 +236,7 @@ input:focus {
 
 /* Style the donate button */
 .donateButton {
-  background-color: #007bff;
+  background-color: #1859ad;
   color: white;
   padding: 12px 20px;
   margin: 10px 0;
@@ -134,7 +250,7 @@ input:focus {
 
 /* Button hover effect */
 .donateButton:hover {
-  background-color: #0056b3;
+  background-color: #192459;
 }
 
 /* Disable button when loading */
