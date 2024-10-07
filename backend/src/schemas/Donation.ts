@@ -1,9 +1,12 @@
 import mongoose, { Schema, Document, model } from "mongoose";
 import { DonatorDocument } from "./Donator";
 
+// In schemas/Donation.ts
 export interface DonationInput {
   donator: {
+    name: string; // Add name
     email: string;
+    phone: string; // Add phone
   };
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";

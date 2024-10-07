@@ -4,6 +4,7 @@ import DonatorModel from "../schemas/Donator";
 import Stripe from "stripe";
 
 // Handle Stripe Webhook events
+// Handle Stripe Webhook events
 export const handleStripeWebhook = async (req: Request, res: Response) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2022-11-15" as Stripe.LatestApiVersion,
@@ -27,6 +28,8 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
 
     // Extract donator info from session (e.g., session.customer_email)
     const donatorEmail = session.customer_email;
+    const donatorName = session.metadata?.name; // Extract name from metadata
+    const donatorPhone = session.metadata?.phone; // Extract phone from metadata
 
     if (!donatorEmail) {
       console.error("Email is missing in session data.");
@@ -37,11 +40,11 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
     let donator = await DonatorModel.findOne({ email: donatorEmail });
 
     if (!donator) {
-      // If donator doesn't exist, create a new donator with placeholder name and phone
+      // Create a new donator with name and phone from metadata
       donator = new DonatorModel({
-        name: "Anonymous Donator", // Placeholder or fetch from additional session data
-        email: donatorEmail,
-        phone: "0000000000", // Placeholder phone number
+        name: donatorName || "Anónimo", // Use metadata name
+        email: donatorEmail || "anonimo@mail.com",
+        phone: donatorPhone || "0000000000", // Use metadata phone
       });
 
       try {
@@ -58,7 +61,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
         donator: donator._id,
         amount: session.amount_total ? session.amount_total / 100 : 0,
         paymentMethod: "stripe",
-        message: "Donation completed through Stripe Checkout",
+        message: "Donación completada a través de Stripe.",
       });
 
       await newDonation.save();

@@ -12,7 +12,7 @@ const DonationCancel: React.FC = () => {
   useEffect(() => {
     if (!sessionId) {
       // Redirect to /landing if session ID is missing
-      navigate("/landing");
+      navigate("/");
     } else {
       console.log("Donation Success with session ID:", sessionId);
       // Fetch more info about the session if necessary
@@ -26,7 +26,7 @@ const DonationCancel: React.FC = () => {
         Parece que cancelaste tu donación. Si cambiaste de opinión, ¡puedes
         intentarlo de nuevo!
       </p>
-      <button onClick={() => navigate("/landing")}>
+      <button onClick={() => navigate("/")}>
         Volver a la página principal
       </button>
     </div>
