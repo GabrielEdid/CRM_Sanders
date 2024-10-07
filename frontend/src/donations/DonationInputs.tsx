@@ -23,9 +23,9 @@ export const DonationInputs = () => {
             label="Método de pago"
             validate={required()}
             choices={[
-              { id: "stripe", name: "Credit/Debit Card" },
-              { id: "cash", name: "Cash" },
-              { id: "transfer", name: "Transfer" },
+              { id: "stripe", name: "Tarjeta de Crédito/Débito" },
+              { id: "cash", name: "Efectivo" },
+              { id: "transfer", name: "Transferencia" },
             ]}
           />
           <TextInput source="message" multiline fullWidth label="Mensaje" />
