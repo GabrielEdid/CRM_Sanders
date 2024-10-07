@@ -13,7 +13,7 @@ const DonationSuccess: React.FC = () => {
   useEffect(() => {
     if (!sessionId) {
       // Redirect to /landing if session ID is missing
-      navigate("/landing");
+      navigate("/");
     } else {
       console.log("Donation Success with session ID:", sessionId);
       // Fetch more info about the session if necessary
@@ -29,7 +29,7 @@ const DonationSuccess: React.FC = () => {
       </p>
       <p>Recibirás un correo de confirmación pronto.</p>
       <p className="sessionId">Identificador de donación: {sessionId}</p>
-      <button onClick={() => navigate("/landing")}>
+      <button onClick={() => navigate("/")}>
         Volver a la página principal
       </button>
     </div>

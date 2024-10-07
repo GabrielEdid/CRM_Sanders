@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.ts"
+    "dev": "concurrently \"npm run backend\" \"npm run stripe\"",
+    "backend": "nodemon src/index.ts",
+    "stripe": "stripe listen --forward-to localhost:5001/webhook"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^22.5.1",
     "@types/stripe": "^8.0.417",
+    "concurrently": "^9.0.1",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"

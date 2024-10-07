@@ -10,10 +10,13 @@ import Donaciones from "./img/Donaciones.jpg";
 const Landing = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isAnonymous, setIsAnonymous] = useState<boolean>(false); // Track anonymous state
   const [donationData, setDonationData] = useState({
     amount: 250, // Default amount
     donator: {
+      name: "",
       email: "",
+      phone: "",
     },
   });
 
@@ -22,7 +25,7 @@ const Landing = () => {
 
   const makeDonation = async (donationData: {
     amount: number;
-    donator: { email: string };
+    donator: { name: string; email: string; phone: string }; // Added name and phone
   }): Promise<void> => {
     setIsLoading(true);
 
@@ -44,19 +47,19 @@ const Landing = () => {
       const { sessionId } = await response.json();
 
       if (!sessionId) {
-        setErrorMessage("Could not create Stripe session. Please try again.");
+        setErrorMessage(
+          "No se pudo crear la sesión de pago. Inténtalo de nuevo."
+        );
         setIsLoading(false);
         return;
       }
 
       const stripe = await loadStripe(
-        "pk_test_51Q5ad0GyaQDHPtc7o5doiVK2aeP5CkolWLeYKHWvpic4At3c3yHG3cIGPC5ejMD3xaCpyVaW8f83nAMAiOIODEHd00EFSvMKYd"
+        "pk_test_51Q4tUmKFn5yEUyQdrzZb2KqYszXKnxGTGyE7jIBmr05yApnA3jUvT7No0yrQeTgmetrBlRumpPFf5uRTlosbkqQT00X3WY6LHX"
       );
 
       if (!stripe) {
-        setErrorMessage(
-          "Error al inicializar Stripe. Por favor, inténtalo de nuevo."
-        );
+        setErrorMessage("Error al inicializar Stripe. Inténtalo de nuevo.");
         setIsLoading(false);
         return;
       }
@@ -69,9 +72,7 @@ const Landing = () => {
         );
       }
     } catch (error) {
-      setErrorMessage(
-        "Ocurrión un error inesperado. Por favor, inténtalo de nuevo."
-      );
+      setErrorMessage("Ocurrió un error inesperado. Inténtalo de nuevo.");
     } finally {
       setIsLoading(false);
     }
@@ -79,6 +80,32 @@ const Landing = () => {
 
   const scrollToDonationSection = () => {
     donationSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Handle the checkbox change
+  const handleAnonymousChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsAnonymous(e.target.checked);
+    if (e.target.checked) {
+      // Set default anonymous values
+      setDonationData({
+        ...donationData,
+        donator: {
+          name: "Anónimo",
+          email: "anonimo@mail.com",
+          phone: "0000000000",
+        },
+      });
+    } else {
+      // Clear the values if unselected
+      setDonationData({
+        ...donationData,
+        donator: {
+          name: "",
+          email: "",
+          phone: "",
+        },
+      });
+    }
   };
 
   return (
@@ -199,6 +226,19 @@ const Landing = () => {
             }}
           >
             <input
+              type="text"
+              value={donationData.donator.name} // New: Name input
+              onChange={(e) =>
+                setDonationData({
+                  ...donationData,
+                  donator: { ...donationData.donator, name: e.target.value },
+                })
+              }
+              placeholder="Tu nombre"
+              disabled={isAnonymous} // Disable if anonymous
+              required={!isAnonymous}
+            />
+            <input
               type="email"
               value={donationData.donator.email}
               onChange={(e) =>
@@ -208,7 +248,21 @@ const Landing = () => {
                 })
               }
               placeholder="Tu correo electrónico"
-              required
+              disabled={isAnonymous} // Disable if anonymous
+              required={!isAnonymous}
+            />
+            <input
+              type="tel"
+              value={donationData.donator.phone} // New: Phone input
+              onChange={(e) =>
+                setDonationData({
+                  ...donationData,
+                  donator: { ...donationData.donator, phone: e.target.value },
+                })
+              }
+              placeholder="Tu teléfono"
+              disabled={isAnonymous} // Disable if anonymous
+              required={!isAnonymous}
             />
             <input
               type="number"
@@ -222,6 +276,14 @@ const Landing = () => {
               placeholder="Cantidad a donar"
               required
             />
+            <div className={styles.anonymousCheckbox}>
+              <label>Donar de forma anónima</label>
+              <input
+                type="checkbox"
+                checked={isAnonymous}
+                onChange={handleAnonymousChange}
+              />
+            </div>
             <button
               type="submit"
               className={styles.donateButton}
