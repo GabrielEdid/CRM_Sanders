@@ -57,7 +57,6 @@ const createDonatorHandler = async (
     const newDonator = await createDonator({
       ...body,
     });
-    console.log(newDonator);
     await newDonator.save();
     res.status(201).json(newDonator);
   } catch (error) {

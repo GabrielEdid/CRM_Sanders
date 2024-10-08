@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { createStripeSessionHandler } from "../controllers/stripeController";
 import validateResource from "../middleware/validateResource";
-import { createDonationSchema } from "../validation/donations";
+import { createStripeDonationSchema } from "../validation/stripe";
 
 const stripeRouter = Router();
 
 stripeRouter.post(
   "/checkout",
-  validateResource(createDonationSchema),
+  validateResource(createStripeDonationSchema),
   createStripeSessionHandler
 );
 

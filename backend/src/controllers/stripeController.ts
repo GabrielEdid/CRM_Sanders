@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { createCheckoutSession } from "../services/stripeService";
-import { CreateDonationInput } from "../validation/donations";
+import { CreateStripeDonationInput } from "../validation/stripe";
 
 export const createStripeSessionHandler = async (
-  req: Request<{}, {}, CreateDonationInput["body"]>,
+  req: Request<{}, {}, CreateStripeDonationInput["body"]>,
   res: Response
 ) => {
   try {
