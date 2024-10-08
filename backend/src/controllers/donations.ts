@@ -47,10 +47,7 @@ const createDonationHandler = async (
 ) => {
   try {
     const body = req.body;
-    const donator = await DonatorModel.findById("66d4d3f327a2bee788b2ec70");
-    if (!donator) {
-      return res.status(404).json({ message: "Donator not found" });
-    }
+    console.log(body);
 
     const newDonation = await Donation.create({
       ...body,

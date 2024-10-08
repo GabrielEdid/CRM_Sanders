@@ -12,13 +12,7 @@ const payload = {
       .string()
       .min(1, "El mensaje debe tener al menos un carácter")
       .optional(),
-    donator: z
-      .object({
-        name: z.string().min(1, "El nombre es obligatorio"), // Add name validation
-        email: z.string().email("El correo electrónico no es válido"),
-        phone: z.string().min(1, "El teléfono es obligatorio"), // Add phone validation
-      })
-      .required(),
+    donator: z.string({ required_error: "El donador es obligatorio" }),
   }),
 };
 
