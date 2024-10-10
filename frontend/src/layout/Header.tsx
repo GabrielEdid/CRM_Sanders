@@ -1,4 +1,3 @@
-// src/layout/Header.tsx
 import React, { useState } from "react";
 import {
   AppBar,
@@ -16,6 +15,10 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { Link, useLocation, matchPath } from "react-router-dom";
 import authProvider from "../authProvider";
 
@@ -48,7 +51,6 @@ const Header = () => {
   } else if (matchPath("/donators/*", currentPath)) {
     currentPath = "/donators";
   } else if (matchPath("/budgets/*", currentPath)) {
-    // Cambiado de "/prueba/*" a "/budgets/*"
     currentPath = "/budgets";
   }
 
@@ -112,12 +114,13 @@ const Header = () => {
           >
             {/* Nueva Pestaña para Dashboard */}
             <Tab
+              icon={<DashboardIcon />} // Agregar ícono
               label="Dashboard"
               component={Link}
               to="/dashboard"
               value="/dashboard"
+              iconPosition="start" // Puedes cambiar a "top" si prefieres íconos arriba
               sx={{
-                fontFamily: "Fraunces, serif",
                 textTransform: "none",
                 fontSize: { xs: 14, sm: 18, md: 22 },
                 padding: { xs: "6px", sm: "8px", md: "12px" },
@@ -128,14 +131,15 @@ const Header = () => {
               }}
             />
 
-            {/* Pestañas Existentes */}
+            {/* Pestaña para Usuarios */}
             <Tab
+              icon={<PeopleIcon />} // Agregar ícono
               label="Users"
               component={Link}
               to="/users"
               value="/users"
+              iconPosition="start"
               sx={{
-                fontFamily: "Fraunces, serif",
                 textTransform: "none",
                 fontSize: { xs: 14, sm: 18, md: 22 },
                 padding: { xs: "6px", sm: "8px", md: "12px" },
@@ -145,13 +149,16 @@ const Header = () => {
                 borderRadius: 2,
               }}
             />
+
+            {/* Pestaña para Donadores */}
             <Tab
+              icon={<VolunteerActivismIcon />} // Agregar ícono
               label="Donadores"
               component={Link}
               to="/donators"
               value="/donators"
+              iconPosition="start"
               sx={{
-                fontFamily: "Fraunces, serif",
                 textTransform: "none",
                 fontSize: { xs: 14, sm: 18, md: 22 },
                 padding: { xs: "6px", sm: "8px", md: "12px" },
@@ -161,13 +168,16 @@ const Header = () => {
                 borderRadius: 2,
               }}
             />
+
+            {/* Pestaña para Presupuestos */}
             <Tab
+              icon={<MonetizationOnIcon />} // Agregar ícono
               label="Presupuestos"
               component={Link}
               to="/budgets"
               value="/budgets"
+              iconPosition="start"
               sx={{
-                fontFamily: "Fraunces, serif",
                 textTransform: "none",
                 fontSize: { xs: 14, sm: 18, md: 22 },
                 padding: { xs: "6px", sm: "8px", md: "12px" },

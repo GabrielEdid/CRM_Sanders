@@ -52,7 +52,7 @@ const DonationsPieChart: React.FC = () => {
 
   return (
     <Card>
-      <CardHeader title="Porcentaje de Donadores Únicos vs Recurrentes" />
+      <CardHeader title="Donadores Únicos vs Recurrentes" />
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>

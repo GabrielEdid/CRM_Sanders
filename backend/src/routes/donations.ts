@@ -9,6 +9,7 @@ import {
   getTopDonatorsHandler,
   getDonationTrendHandler,
   getRecurringVsUniqueDonationsHandler,
+  getPaymentMethodDistributionHandler,
 } from "../controllers/donations";
 
 import validateResource from "../middleware/validateResource";
@@ -25,6 +26,10 @@ donationsRouter.get("/top-donators", getTopDonatorsHandler);
 donationsRouter.get(
   "/recurring-vs-unique",
   getRecurringVsUniqueDonationsHandler
+);
+donationsRouter.get(
+  "/payment-method-distribution",
+  getPaymentMethodDistributionHandler
 );
 donationsRouter.get("/", getDonationsHandler);
 donationsRouter.get("/:id", getDonationHandler);

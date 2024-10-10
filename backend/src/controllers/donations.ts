@@ -430,11 +430,41 @@ const getRecurringVsUniqueDonationsHandler = async (
     }
   } catch (error) {
     console.error(error);
+    res.status(500).json({
+      message: "Error al obtener las donaciones recurrentes y únicas",
+    });
+  }
+};
+
+const getPaymentMethodDistributionHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const paymentMethodDistribution = await Donation.aggregate([
+      {
+        $group: {
+          _id: "$paymentMethod",
+          totalAmount: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          paymentMethod: "$_id",
+          totalAmount: 1,
+          count: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(paymentMethodDistribution);
+  } catch (error) {
+    console.error(error);
     res
       .status(500)
-      .json({
-        message: "Error al obtener las donaciones recurrentes y únicas",
-      });
+      .json({ message: "Error al obtener la distribución de métodos de pago" });
   }
 };
 
@@ -447,4 +477,5 @@ export {
   getTopDonatorsHandler,
   getDonationTrendHandler,
   getRecurringVsUniqueDonationsHandler,
+  getPaymentMethodDistributionHandler,
 };
