@@ -131,10 +131,320 @@ const deleteDonationHandler = async (req: Request, res: Response) => {
   }
 };
 
+const getTopDonatorsHandler = async (req: Request, res: Response) => {
+  try {
+    const topDonators = await Donation.aggregate([
+      {
+        $group: {
+          _id: "$donator",
+          totalAmount: { $sum: "$amount" },
+        },
+      },
+      {
+        $sort: { totalAmount: -1 },
+      },
+      {
+        $limit: 5,
+      },
+      {
+        $lookup: {
+          from: "donators",
+          localField: "_id",
+          foreignField: "_id",
+          as: "donator",
+        },
+      },
+      {
+        $unwind: "$donator",
+      },
+      {
+        $project: {
+          _id: 0,
+          donatorId: "$_id",
+          donatorName: "$donator.name",
+          donatorEmail: "$donator.email",
+          totalAmount: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(topDonators);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener los donadores principales" });
+  }
+};
+
+const getDonationTrendHandler = async (req: Request, res: Response) => {
+  try {
+    const { interval } = req.query; // Obtener el parámetro 'interval' de la consulta
+    const currentDate = new Date();
+    let startDate: Date | null = null;
+
+    // Determinar la fecha de inicio basada en el intervalo
+    switch (interval) {
+      case "day":
+        // Últimos 30 días
+        startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate() - 30);
+        break;
+
+      case "week":
+        // Últimas 7 semanas
+        startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate() - 7 * 7); // Aproximadamente 7 semanas
+        break;
+
+      case "month":
+        // Últimos 12 meses
+        startDate = new Date(currentDate);
+        startDate.setMonth(startDate.getMonth() - 12);
+        break;
+
+      case "year":
+        // Mostrar todos los años (no establecer startDate)
+        startDate = null;
+        break;
+
+      default:
+        // Valor por defecto: 'month'
+        startDate = new Date(currentDate);
+        startDate.setMonth(startDate.getMonth() - 12);
+        break;
+    }
+
+    // Construir el pipeline de agregación
+    const pipeline: any[] = [];
+
+    // Añadir etapa $match si startDate está definido
+    if (startDate) {
+      pipeline.push({
+        $match: {
+          createdAt: { $gte: startDate },
+        },
+      });
+    }
+
+    // Definir las etapas de agrupación y proyección según el intervalo
+    switch (interval) {
+      case "day":
+        startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate() - 30); // Últimos 30 días
+        pipeline.push({
+          $match: {
+            createdAt: { $gte: startDate },
+          },
+        });
+        pipeline.push({
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              month: { $month: "$createdAt" },
+              day: { $dayOfMonth: "$createdAt" },
+            },
+            totalAmount: { $sum: "$amount" },
+          },
+        });
+        pipeline.push({
+          $project: {
+            _id: 0,
+            date: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: {
+                  $dateFromParts: {
+                    year: "$_id.year",
+                    month: "$_id.month",
+                    day: "$_id.day",
+                  },
+                },
+              },
+            },
+            totalAmount: 1,
+          },
+        });
+        pipeline.push({
+          $sort: { date: 1 },
+        });
+        break;
+
+      case "week":
+        startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate() - 7 * 7); // Últimas 7 semanas
+        pipeline.push({
+          $match: {
+            createdAt: { $gte: startDate },
+          },
+        });
+        pipeline.push({
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              week: { $isoWeek: "$createdAt" }, // Agrupar por semana ISO
+            },
+            totalAmount: { $sum: "$amount" },
+          },
+        });
+        pipeline.push({
+          $project: {
+            _id: 0,
+            date: {
+              $concat: [
+                { $toString: "$_id.year" },
+                "-W",
+                {
+                  $cond: [
+                    { $lte: ["$_id.week", 9] },
+                    { $concat: ["0", { $toString: "$_id.week" }] },
+                    { $toString: "$_id.week" },
+                  ],
+                },
+              ],
+            },
+            totalAmount: 1,
+          },
+        });
+        pipeline.push({
+          $sort: { date: 1 },
+        });
+        break;
+
+      case "year":
+        pipeline.push({
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+            },
+            totalAmount: { $sum: "$amount" },
+          },
+        });
+
+        pipeline.push({
+          $project: {
+            _id: 0,
+            date: { $toString: "$_id.year" },
+            totalAmount: 1,
+          },
+        });
+        break;
+
+      case "month":
+      default:
+        pipeline.push({
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              month: { $month: "$createdAt" },
+            },
+            totalAmount: { $sum: "$amount" },
+          },
+        });
+
+        pipeline.push({
+          $project: {
+            _id: 0,
+            date: {
+              $dateToString: {
+                format: "%Y-%m",
+                date: {
+                  $dateFromParts: {
+                    year: "$_id.year",
+                    month: "$_id.month",
+                    day: 1,
+                  },
+                },
+              },
+            },
+            totalAmount: 1,
+          },
+        });
+        break;
+    }
+
+    // Añadir etapa $sort para ordenar cronológicamente
+    pipeline.push({
+      $sort: { date: 1 },
+    });
+
+    // Ejecutar la agregación
+    const donationTrend = await Donation.aggregate(pipeline);
+
+    res.status(200).json(donationTrend);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener la tendencia de donaciones" });
+  }
+};
+
+const getRecurringVsUniqueDonationsHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const result = await Donation.aggregate([
+      {
+        $group: {
+          _id: "$donator",
+          totalDonations: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "donators",
+          localField: "_id",
+          foreignField: "_id",
+          as: "donator",
+        },
+      },
+      {
+        $unwind: "$donator",
+      },
+      {
+        $group: {
+          _id: null,
+          uniqueDonators: {
+            $sum: { $cond: [{ $eq: ["$totalDonations", 1] }, 1, 0] },
+          },
+          recurringDonators: {
+            $sum: { $cond: [{ $gt: ["$totalDonations", 1] }, 1, 0] },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          uniqueDonators: 1,
+          recurringDonators: 1,
+        },
+      },
+    ]);
+
+    if (result.length > 0) {
+      res.status(200).json(result[0]);
+    } else {
+      res.status(200).json({ uniqueDonators: 0, recurringDonators: 0 });
+    }
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        message: "Error al obtener las donaciones recurrentes y únicas",
+      });
+  }
+};
+
 export {
   getDonationHandler,
   getDonationsHandler,
   createDonationHandler,
   updateDonationHandler,
   deleteDonationHandler,
+  getTopDonatorsHandler,
+  getDonationTrendHandler,
+  getRecurringVsUniqueDonationsHandler,
 };

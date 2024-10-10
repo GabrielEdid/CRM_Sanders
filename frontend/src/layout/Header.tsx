@@ -1,3 +1,4 @@
+// src/layout/Header.tsx
 import React, { useState } from "react";
 import {
   AppBar,
@@ -40,12 +41,15 @@ const Header = () => {
     ? location.hash.substring(1)
     : location.pathname;
 
-  if (matchPath("/users/*", currentPath)) {
+  if (matchPath("/dashboard/*", currentPath)) {
+    currentPath = "/dashboard";
+  } else if (matchPath("/users/*", currentPath)) {
     currentPath = "/users";
   } else if (matchPath("/donators/*", currentPath)) {
     currentPath = "/donators";
-  } else if (matchPath("/prueba/*", currentPath)) {
-    currentPath = "/prueba";
+  } else if (matchPath("/budgets/*", currentPath)) {
+    // Cambiado de "/prueba/*" a "/budgets/*"
+    currentPath = "/budgets";
   }
 
   return (
@@ -106,6 +110,25 @@ const Header = () => {
               },
             }}
           >
+            {/* Nueva Pestaña para Dashboard */}
+            <Tab
+              label="Dashboard"
+              component={Link}
+              to="/dashboard"
+              value="/dashboard"
+              sx={{
+                fontFamily: "Fraunces, serif",
+                textTransform: "none",
+                fontSize: { xs: 14, sm: 18, md: 22 },
+                padding: { xs: "6px", sm: "8px", md: "12px" },
+                backgroundColor:
+                  currentPath === "/dashboard" ? "#ffffff30" : "transparent",
+                color: currentPath === "/dashboard" ? "#ffffff" : "inherit",
+                borderRadius: 2,
+              }}
+            />
+
+            {/* Pestañas Existentes */}
             <Tab
               label="Users"
               component={Link}
