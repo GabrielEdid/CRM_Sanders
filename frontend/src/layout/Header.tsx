@@ -71,7 +71,7 @@ const Header = () => {
             display="flex"
             alignItems="center"
             component={Link}
-            to="/"
+            to="/dashboard"
             sx={{
               color: "inherit",
               textDecoration: "inherit",

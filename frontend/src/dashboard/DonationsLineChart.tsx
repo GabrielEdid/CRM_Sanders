@@ -45,7 +45,6 @@ const DonationsLineChart: React.FC = () => {
         }
         const result: DonationTrend[] = await response.json();
         setData(result);
-        console.log(result);
       } catch (err: any) {
         setError(err.message || "Error desconocido");
         console.error(err);

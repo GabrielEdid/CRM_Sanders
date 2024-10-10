@@ -47,7 +47,6 @@ const TopDonatorsChart: React.FC = () => {
           color: COLORS[index % COLORS.length],
         }));
         setData(resultWithColors);
-        console.log(resultWithColors);
       } catch (err: any) {
         setError(err.message || "Error desconocido");
         console.error(err);

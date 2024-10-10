@@ -48,8 +48,6 @@ const DonatorShowContent = () => {
 
   if (isLoading || !record) return null;
 
-  console.log("record", record);
-
   return (
     <Box mt={2} display="flex">
       <Box flex="1">
