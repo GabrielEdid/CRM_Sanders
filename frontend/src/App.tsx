@@ -23,7 +23,7 @@ import CustomLogin from "./CustomLogin";
 import DonationSuccess from "./DonationSuccess";
 import DonationCancel from "./DonationCancel";
 import { i18nProvider } from "./i18nprovider";
-import Dashboard from "./dashboard/dashboard";
+import Dashboard from "./dashboard/Dashboard";
 
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
