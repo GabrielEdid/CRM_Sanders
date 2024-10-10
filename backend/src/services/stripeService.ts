@@ -26,6 +26,7 @@ export const createCheckoutSession = async (donation: StripeDonationInput) => {
     metadata: {
       name: donation.donator.name, // Now name is valid
       phone: donation.donator.phone, // Now phone is valid
+      isSendEmails: donation.donator.isSendEmails.toString(), // Asegúrate de enviar esto como cadena
     },
     success_url: `${process.env.FRONTEND_URL}/donation-success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.FRONTEND_URL}/donation-canceled`,

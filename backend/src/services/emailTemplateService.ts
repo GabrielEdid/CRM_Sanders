@@ -29,21 +29,22 @@ export const donationHtmlTemplate = async (
   body1: string,
   headerArticle1: string | null,
   bodyArticle1: string | null,
+  readMoreUrlArticle1: string | null,
   headerArticle2: string | null,
   bodyArticle2: string | null,
+  readMoreUrlArticle2: string | null,
   stat1: string,
   descriptionStat1: string,
   stat2: string,
   descriptionStat2: string,
   stat3: string,
-  descriptionStat3: string,
-  headerArticle3: string | null,
-  bodyArticle3: string | null
+  descriptionStat3: string
 ) => {
   const templateData = {
     body1,
     headerArticle1,
     bodyArticle1,
+    readMoreUrlArticle1,
     stat1,
     descriptionStat1,
     stat2,
@@ -52,8 +53,7 @@ export const donationHtmlTemplate = async (
     descriptionStat3,
     headerArticle2,
     bodyArticle2,
-    headerArticle3,
-    bodyArticle3,
+    readMoreUrlArticle2,
     currentYear: new Date().getFullYear(),
   };
 

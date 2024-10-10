@@ -4,6 +4,7 @@ export interface DonatorInput {
   name: string;
   email: string;
   phone: string;
+  isSendEmails: boolean;
 }
 
 export interface DonatorDocument extends DonatorInput, mongoose.Document {
@@ -27,6 +28,10 @@ const donatorSchema = new Schema({
   phone: {
     type: String,
     required: [true, "El teléfono es obligatorio"],
+  },
+  isSendEmails: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,

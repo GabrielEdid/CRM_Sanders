@@ -17,6 +17,7 @@ const payload = {
         required_error: "El teléfono  es requerido",
       })
       .min(1, "El teléfono tiene que tener al menos 1 caracter"),
+    isSendEmails: z.boolean(),
   }),
 };
 

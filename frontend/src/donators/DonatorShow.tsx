@@ -48,6 +48,8 @@ const DonatorShowContent = () => {
 
   if (isLoading || !record) return null;
 
+  console.log("record", record);
+
   return (
     <Box mt={2} display="flex">
       <Box flex="1">
@@ -71,6 +73,10 @@ const DonatorShowContent = () => {
                   </Typography>
                   <Typography variant="body1">
                     <strong>Número de Teléfono:</strong> {record.phone}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Recibe emails de Marketing:</strong>{" "}
+                    {record.isSendEmails ? "Sí" : "No"}
                   </Typography>
                 </Stack>
               </TabbedShowLayout.Tab>

@@ -11,6 +11,7 @@ export type Donator = {
   name: string;
   email: string;
   phone: string;
+  isSendEmails: boolean;
   totalDonations: number;
   totalAmountDonated: number;
   lastDonationDate: Date;

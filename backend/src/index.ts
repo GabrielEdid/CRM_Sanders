@@ -17,6 +17,7 @@ import { donatorsRouter } from "./routes/donators";
 import { budgetsRouter } from "./routes/budgets";
 import { stripeRouter } from "./routes/stripe";
 import { webhookRouter } from "./routes/webhook"; // Import the new webhook router
+import { articlesRouter } from "./routes/articles";
 
 // Crea la aplicación de Express
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/donators", donatorsRouter);
 app.use("/api/v1/budgets", budgetsRouter);
 app.use("/api/v1/stripe", stripeRouter);
+app.use("/api/v1/articles", articlesRouter);
 
 // Ruta para probar el backend en el navegador
 app.get("/", (req: Request, res: Response) => {

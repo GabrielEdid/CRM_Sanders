@@ -10,9 +10,6 @@ import {
 import { Request, Response } from "express";
 
 import { CreateUserInput } from "../validation/users";
-import { sendMail } from "../services/nodeMailerService";
-import { donationHtmlTemplate } from "../services/emailTemplateService";
-import { attachments } from "../types/donationEmail";
 const secretKey = process.env.SECRET_KEY || "";
 
 const bcrypt = require("bcrypt");
@@ -53,7 +50,6 @@ const loginHandler = async (req: Request, res: Response) => {
 
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
-      console.log(password);
 
       if (passwordMatch) {
         const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
@@ -144,44 +140,6 @@ const deleteUserHandler = async (req: Request, res: Response) => {
   }
 };
 
-const emailSender = async (req: Request, res: Response) => {
-  const receivers = [
-    "diegoabdov@gmail.com",
-    "marcosdm0404@gmail.com",
-    "ishakalopaz@gmail.com",
-    "gabrieledid28@gmail.com",
-  ];
-  const subject = "¡Gracias por tu donación!";
-
-  const htmlEmail = await donationHtmlTemplate(
-    `Hola<br />De parte de la Fundación Sanders agradecemos mucho tu donación.`,
-    "headerArticle1",
-    "bodyArticle1",
-    "headerArticle2",
-    "bodyArticle2",
-    "stat1",
-    "descriptionStat1",
-    "stat2",
-    "descriptionStat2",
-    "stat3",
-    "descriptionStat3",
-    "headerArticle3",
-    "bodyArticle3"
-  );
-
-  if (!htmlEmail) {
-    return res.status(500).json({ message: "Error al crear el correo" });
-  }
-
-  await sendMail({
-    subject,
-    html: htmlEmail,
-    to: receivers,
-    attachments: attachments,
-  });
-  res.status(200).json({ message: "Email enviado" });
-};
-
 export {
   getUserHandler,
   getUsersHandler,
@@ -189,5 +147,4 @@ export {
   updateUserHandler,
   deleteUserHandler,
   loginHandler,
-  emailSender,
 };

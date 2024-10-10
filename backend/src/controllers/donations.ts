@@ -1,13 +1,15 @@
 import {
   getDonation,
   getDonations,
-  createDonation,
   updateDonation,
   deleteDonation,
+  getLastYearDonationSummary,
 } from "../services/donations";
 
+import { get2RandomArticles } from "../services/articles";
+
 import { Request, Response } from "express";
-import Donation from "../schemas/Donation";
+import Donation, { DonationInput } from "../schemas/Donation";
 import {
   CreateDonationInput,
   UpdateDonationInput,
@@ -15,7 +17,8 @@ import {
 import { donationHtmlTemplate } from "../services/emailTemplateService";
 import { sendMail } from "../services/nodeMailerService";
 import { attachments } from "../types/donationEmail";
-import DonatorModel from "../schemas/Donator"; // Assuming you have a Donator model
+import DonatorModel, { DonatorInput } from "../schemas/Donator"; // Assuming you have a Donator model
+import { formatCurrency } from "../services/utils";
 
 const getDonationsHandler = async (req: Request, res: Response) => {
   try {
@@ -41,58 +44,79 @@ const getDonationHandler = async (req: Request, res: Response) => {
   }
 };
 
+const sendDonationEmail = async (
+  donation: DonationInput,
+  donator: DonatorInput
+) => {
+  const { totalDonations, totalTransactions, donatorsCount } =
+    await getLastYearDonationSummary();
+
+  const articles = await get2RandomArticles();
+
+  const htmlEmail = await donationHtmlTemplate(
+    `Hola, ${
+      donator.name || donator.email
+    }! <br />De parte de la Fundación Sanders agradecemos mucho tu donación por ${formatCurrency(
+      donation.amount
+    )}.`,
+    articles[0].title,
+    articles[0].body,
+    articles[0].readMoreUrlArticle,
+    articles[1].title,
+    articles[1].body,
+    articles[1].readMoreUrlArticle,
+    `${formatCurrency(totalDonations)}`,
+    "Total recaudado",
+    `${totalTransactions}`,
+    "Número de transacciones",
+    `${donatorsCount}`,
+    "Número de donadores"
+  );
+
+  if (!htmlEmail) {
+    throw new Error("Error al crear el correo");
+  }
+
+  await sendMail({
+    subject: `${donator.name || donator.email} ¡Gracias por tu donación!`,
+    html: htmlEmail,
+    to: [donator.email],
+    attachments: attachments,
+  });
+};
+
+const createDonation = async (donation: DonationInput) => {
+  const newDonation = await Donation.create({
+    ...donation,
+  });
+  try {
+    await newDonation.save();
+  } catch (error) {
+    return { error, message: "Error al crear la donación" };
+  }
+
+  const donator = await DonatorModel.findById(donation.donator);
+
+  if (donator && donator.email !== "anonimo@mail.com") {
+    try {
+      await sendDonationEmail(newDonation, donator);
+      return newDonation;
+    } catch (error) {
+      return { error, message: "Error al enviar el correo" };
+    }
+  }
+};
+
 const createDonationHandler = async (
   req: Request<{}, {}, CreateDonationInput["body"]>,
   res: Response
 ) => {
   try {
     const body = req.body;
-    console.log(body);
-
-    const newDonation = await Donation.create({
-      ...body,
-    });
-
-    await newDonation.save();
-
-    // `Hola, ${
-    //   newDonation?.donator?.name! || ""
-    // } <br />De parte de la Fundación Sanders agradecemos mucho tu donación.`,
-
-    // validar con donator.isSendEmails antes de mandar el correo
-
-    const htmlEmail = await donationHtmlTemplate(
-      `Hola<br />De parte de la Fundación Sanders agradecemos mucho tu donación.`,
-      "headerArticle1",
-      "bodyArticle1",
-      "headerArticle2",
-      "bodyArticle2",
-      "stat1",
-      "descriptionStat1",
-      "stat2",
-      "descriptionStat2",
-      "stat3",
-      "descriptionStat3",
-      "headerArticle3",
-      "bodyArticle3"
-    );
-
-    if (!htmlEmail) {
-      return res.status(500).json({ message: "Error al crear el correo" });
-    }
-
-    await sendMail({
-      subject: "¡Gracias por tu donación!",
-      html: htmlEmail,
-      // to: [newDonation?.donator?.email!],
-      to: ["marcosdm0404@gmail.com"],
-      attachments: attachments,
-    });
-
+    const newDonation = await createDonation(body);
     res.status(201).json(newDonation);
-    console.log("Donación creada");
   } catch (error) {
-    res.status(500).json({ message: "Error al crear la donación" });
+    res.status(500).json({ error });
   }
 };
 
@@ -135,6 +159,7 @@ export {
   getDonationHandler,
   getDonationsHandler,
   createDonationHandler,
+  createDonation,
   updateDonationHandler,
   deleteDonationHandler,
 };

@@ -14,7 +14,6 @@ const DonationCancel: React.FC = () => {
       // Redirect to /landing if session ID is missing
       navigate("/");
     } else {
-      console.log("Donation Success with session ID:", sessionId);
       // Fetch more info about the session if necessary
     }
   }, [sessionId, navigate]);

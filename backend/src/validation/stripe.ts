@@ -16,7 +16,8 @@ const payload = {
       .object({
         name: z.string().min(1, "El nombre es obligatorio"), // Add name validation
         email: z.string().email("El correo electrónico no es válido"),
-        phone: z.string().min(1, "El teléfono es obligatorio"), // Add phone validation
+        phone: z.string().optional(), // Add phone validation
+        isSendEmails: z.boolean(),
       })
       .required(),
   }),

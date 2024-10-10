@@ -3,7 +3,7 @@ import { DonatorDocument } from "./Donator";
 
 // In schemas/Donation.ts
 export interface DonationInput {
-  donator: string;
+  donator?: string;
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
   message?: string;

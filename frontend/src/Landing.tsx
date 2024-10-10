@@ -17,6 +17,7 @@ const Landing = () => {
       name: "",
       email: "",
       phone: "",
+      isSendEmails: true,
     },
   });
 
@@ -25,7 +26,12 @@ const Landing = () => {
 
   const makeDonation = async (donationData: {
     amount: number;
-    donator: { name: string; email: string; phone: string }; // Added name and phone
+    donator: {
+      name: string;
+      email: string;
+      phone: string;
+      isSendEmails: boolean;
+    }; // Added name and phone
   }): Promise<void> => {
     setIsLoading(true);
 
@@ -93,6 +99,7 @@ const Landing = () => {
           name: "Anónimo",
           email: "anonimo@mail.com",
           phone: "0000000000",
+          isSendEmails: false,
         },
       });
     } else {
@@ -103,6 +110,7 @@ const Landing = () => {
           name: "",
           email: "",
           phone: "",
+          isSendEmails: false,
         },
       });
     }
@@ -282,6 +290,29 @@ const Landing = () => {
                 type="checkbox"
                 checked={isAnonymous}
                 onChange={handleAnonymousChange}
+              />
+            </div>
+            <div className={styles.anonymousCheckbox}>
+              <label>
+                Acepto recibir correos electrónicos informativos con información
+                sobre la fundación
+              </label>
+              <input
+                type="checkbox"
+                defaultChecked={true}
+                onChange={(e) => {
+                  console.log(
+                    "!donationData.donator.isSendEmails",
+                    !donationData.donator.isSendEmails
+                  );
+                  setDonationData({
+                    ...donationData,
+                    donator: {
+                      ...donationData.donator,
+                      isSendEmails: !donationData.donator.isSendEmails,
+                    },
+                  });
+                }}
               />
             </div>
             <button

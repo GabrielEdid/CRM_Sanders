@@ -13,6 +13,42 @@ const getDonation = async (id: string) => {
   return await Donation.findById(id);
 };
 
+const getLastYearDonationSummary = async () => {
+  const lastYear = new Date();
+  lastYear.setFullYear(lastYear.getFullYear() - 1);
+
+  const donations = await Donation.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: lastYear },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalDonations: { $sum: "$amount" },
+        totalTransactions: { $sum: 1 },
+        uniqueDonators: { $addToSet: "$donator" },
+      },
+    },
+    {
+      $project: {
+        totalDonations: 1,
+        totalTransactions: 1,
+        donatorsCount: { $size: "$uniqueDonators" },
+      },
+    },
+  ]);
+
+  return (
+    donations[0] || {
+      totalDonations: 0,
+      totalTransactions: 0,
+      donatorsCount: 0,
+    }
+  );
+};
+
 const createDonation = async (donation: DonationInput) => {
   return await Donation.create(donation);
 };
@@ -28,6 +64,7 @@ const deleteDonation = async (id: string) => {
 export {
   getDonations,
   getDonation,
+  getLastYearDonationSummary,
   createDonation,
   updateDonation,
   deleteDonation,
