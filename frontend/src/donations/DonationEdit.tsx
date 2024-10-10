@@ -5,7 +5,7 @@ import { DonationInputs } from "./DonationInputs";
 
 export const DonationEdit = () => {
   return (
-    <EditBase redirect="show">
+    <EditBase redirect="create">
       <Box mt={2} display="flex">
         <Box flex="1">
           <Form>

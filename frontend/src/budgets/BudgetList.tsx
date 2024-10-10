@@ -2,18 +2,28 @@ import {
   TopToolbar,
   ExportButton,
   CreateButton,
-  Pagination,
   useGetIdentity,
   ListBase,
   Title,
   ListToolbar,
   useListContext,
+  TextInput,
 } from "react-admin";
 
 import { ImageList } from "./GridList";
 
 import { Stack } from "@mui/material";
 import { BudgetEmpty } from "./BudgetEmpty";
+
+const BudgetFilters = [
+  <TextInput
+    label="Buscar por nombre"
+    source="name"
+    alwaysOn
+    key="1"
+    fullWidth
+  />,
+];
 
 export const BudgetList = () => {
   const { identity } = useGetIdentity();
@@ -34,11 +44,10 @@ const BudgetListLayout = () => {
 
   return (
     <Stack direction="row" component="div" marginTop={5}>
-      <Stack sx={{ width: "100%" }}>
+      <Stack sx={{ width: "100%" }} marginBottom={5}>
         <Title title={"Companies"} />
-        <ListToolbar actions={<BudgetListActions />} />
+        <ListToolbar filters={BudgetFilters} actions={<BudgetListActions />} />
         <ImageList />
-        <Pagination rowsPerPageOptions={[10, 25, 50, 100]} />
       </Stack>
     </Stack>
   );

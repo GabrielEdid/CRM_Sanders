@@ -216,10 +216,7 @@ h2 {
 }
 
 /* General input styling for text inputs, number, email, etc. */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="tel"] {
+.donationInput {
   width: 100%;
   padding: 12px 15px;
   margin: 8px 0;
@@ -231,10 +228,7 @@ input[type="tel"] {
 }
 
 /* Input focus effect */
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-input[type="tel"]:focus {
+.donationInput:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -273,6 +267,7 @@ input[type="tel"]:focus {
 }
 
 /* Form styling */
+/*
 form {
   display: flex;
   flex-direction: column;
@@ -280,7 +275,7 @@ form {
   max-width: 400px;
   margin: 0 auto;
 }
-
+*/
 /* Checkbox specific styling */
 .anonymousCheckbox {
   display: flex;
