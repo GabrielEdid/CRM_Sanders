@@ -53,9 +53,17 @@ const createDonatorHandler = async (
   res: Response
 ) => {
   try {
-    const body = req.body;
+    const { email } = req.body;
+    const existingDonator = await getDonator({ email });
+
+    if (existingDonator) {
+      return res.status(409).json({
+        error: "Ya existe un donador con ese correo electrónico",
+      });
+    }
+
     const newDonator = await createDonator({
-      ...body,
+      ...req.body,
     });
     await newDonator.save();
     res.status(201).json(newDonator);

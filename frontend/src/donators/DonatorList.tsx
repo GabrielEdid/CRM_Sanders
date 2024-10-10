@@ -2,7 +2,6 @@ import {
   TopToolbar,
   ExportButton,
   CreateButton,
-  Pagination,
   useGetIdentity,
   ListBase,
   Title,
@@ -17,18 +16,20 @@ import { Stack } from "@mui/material";
 import { DonationEmpty } from "./DonatorEmpty";
 import { DonatorListFilter } from "./DonatorListFilter";
 const DonatorFilters = [
-  <TextInput label="Buscar por nombre" source="name" alwaysOn key="1" />,
+  <TextInput
+    label="Buscar por nombre"
+    source="name"
+    alwaysOn
+    key="1"
+    fullWidth
+  />,
 ];
 
 export const DonatorList = () => {
   const { identity } = useGetIdentity();
   if (!identity) return null;
   return (
-    <ListBase
-      perPage={25}
-      sort={{ field: "name", order: "ASC" }}
-      filterDefaultValues={{ name: "" }}
-    >
+    <ListBase filterDefaultValues={{ name: "" }}>
       <DonatorListLayout />
     </ListBase>
   );
@@ -44,14 +45,13 @@ const DonatorListLayout = () => {
   return (
     <Stack direction="row" component="div" marginTop={5}>
       <DonatorListFilter />
-      <Stack sx={{ width: "100%" }}>
+      <Stack sx={{ width: "100%" }} marginBottom={5}>
         <Title title={"Companies"} />
         <ListToolbar
           filters={DonatorFilters}
           actions={<DonatorListActions />}
         />
         <ImageList />
-        <Pagination rowsPerPageOptions={[10, 25, 50, 100]} />
       </Stack>
     </Stack>
   );

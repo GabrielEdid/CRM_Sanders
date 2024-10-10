@@ -44,7 +44,7 @@ const donatorSchema = new Schema({
 });
 
 donatorSchema.methods.toJSON = function () {
-  const obj = this.toObject({ getters: true }); // Obtener una copia del documento como un objeto JS
+  const obj = this.toObject({ getters: true });
   obj.id = obj._id.toString();
   delete obj._id;
   delete obj.__v;

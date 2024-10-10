@@ -35,7 +35,11 @@ const LoadedGridList = () => {
       width="100%"
       gap={1}
       display="grid"
-      gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+      gridTemplateColumns={{
+        xs: "repeat(1, 1fr)", // 1 column on small screens
+        sm: "repeat(2, 1fr)", // 2 columns on small to medium screens
+        md: "repeat(4, 1fr)", // 3 columns on medium and up
+      }}
       mt={2}
     >
       {data.map((record) => (

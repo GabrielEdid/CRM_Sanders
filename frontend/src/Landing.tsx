@@ -234,6 +234,7 @@ const Landing = () => {
             }}
           >
             <input
+              className={styles.donationInput}
               type="text"
               value={donationData.donator.name} // New: Name input
               onChange={(e) =>
@@ -258,6 +259,7 @@ const Landing = () => {
               placeholder="Tu correo electrónico"
               disabled={isAnonymous} // Disable if anonymous
               required={!isAnonymous}
+              className={styles.donationInput}
             />
             <input
               type="tel"
@@ -271,6 +273,7 @@ const Landing = () => {
               placeholder="Tu teléfono"
               disabled={isAnonymous} // Disable if anonymous
               required={!isAnonymous}
+              className={styles.donationInput}
             />
             <input
               type="number"
@@ -283,6 +286,7 @@ const Landing = () => {
               }
               placeholder="Cantidad a donar"
               required
+              className={styles.donationInput}
             />
             <div className={styles.anonymousCheckbox}>
               <label>Donar de forma anónima</label>

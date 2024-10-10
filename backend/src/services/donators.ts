@@ -1,4 +1,7 @@
-import DonatorModel, { DonatorInput } from "../schemas/Donator";
+import DonatorModel, {
+  DonatorInput,
+  DonatorDocument,
+} from "../schemas/Donator";
 import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import DonationModel from "../schemas/Donation";
 
@@ -75,8 +78,27 @@ const getDonators = async (
   return donators;
 };
 
-const getDonator = async (id: string) => {
-  return await DonatorModel.findById(id);
+const getDonator = async (
+  queryOrId: string | FilterQuery<DonatorDocument>,
+  options: QueryOptions = { lean: true }
+) => {
+  if (typeof queryOrId === "string") {
+    const donator = await DonatorModel.findById(queryOrId, {}, options);
+    const jsonDonator = {
+      ...donator,
+      id: donator?._id,
+    };
+
+    return jsonDonator;
+  } else {
+    const donator = await DonatorModel.findOne(queryOrId, {}, options);
+    const jsonDonator = {
+      ...donator,
+      id: donator?._id,
+    };
+
+    return jsonDonator;
+  }
 };
 
 const createDonator = async (donator: DonatorInput) => {

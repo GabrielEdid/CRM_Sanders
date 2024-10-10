@@ -14,6 +14,13 @@ export const BudgetCard = (props: { record?: Budget }) => {
   const record = useRecordContext<Budget>(props);
   if (!record) return null;
 
+  const formatCurrency = (amountInCents: number) => {
+    return (amountInCents / 100).toLocaleString("es-MX", {
+      style: "currency",
+      currency: "MXN",
+    });
+  };
+
   return (
     <Link
       to={createPath({
@@ -32,7 +39,6 @@ export const BudgetCard = (props: { record?: Budget }) => {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "1em",
-          maxWidth: 250,
         }}
         elevation={elevation}
       >
@@ -52,9 +58,8 @@ export const BudgetCard = (props: { record?: Budget }) => {
             <DealIcon color="disabled" sx={{ mr: 1 }} />
             <div>
               <Typography variant="subtitle2" sx={{ mb: -1 }}>
-                $
                 {record.totalAmountInCentsMXN
-                  ? record.totalAmountInCentsMXN
+                  ? formatCurrency(record.totalAmountInCentsMXN)
                   : 0}
               </Typography>
               <Typography variant="caption" color="textSecondary">
@@ -67,7 +72,7 @@ export const BudgetCard = (props: { record?: Budget }) => {
             <div>
               <Typography variant="subtitle2" sx={{ mb: -1 }}>
                 {record.collectedAmountInCentsMXN
-                  ? record.collectedAmountInCentsMXN
+                  ? formatCurrency(record.collectedAmountInCentsMXN)
                   : 0}
               </Typography>
               <Typography variant="caption" color="textSecondary">

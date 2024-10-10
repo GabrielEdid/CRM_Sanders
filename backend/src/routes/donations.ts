@@ -6,6 +6,10 @@ import {
   createDonationHandler,
   updateDonationHandler,
   deleteDonationHandler,
+  getTopDonatorsHandler,
+  getDonationTrendHandler,
+  getRecurringVsUniqueDonationsHandler,
+  getPaymentMethodDistributionHandler,
 } from "../controllers/donations";
 
 import validateResource from "../middleware/validateResource";
@@ -17,6 +21,16 @@ import {
 
 const donationsRouter = Router();
 
+donationsRouter.get("/trend", getDonationTrendHandler);
+donationsRouter.get("/top-donators", getTopDonatorsHandler);
+donationsRouter.get(
+  "/recurring-vs-unique",
+  getRecurringVsUniqueDonationsHandler
+);
+donationsRouter.get(
+  "/payment-method-distribution",
+  getPaymentMethodDistributionHandler
+);
 donationsRouter.get("/", getDonationsHandler);
 donationsRouter.get("/:id", getDonationHandler);
 donationsRouter.post(

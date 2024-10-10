@@ -11,7 +11,15 @@ import { CreateBudgetInput, UpdateBudgetInput } from "../validation/budgets";
 
 const getBudgetsHandler = async (req: Request, res: Response) => {
   try {
-    const budgets = await getBudgets({});
+    const { name } = req.query;
+
+    const filter: any = {};
+    if (name) {
+      filter.title = { $regex: name, $options: "i" };
+    }
+
+    const budgets = await getBudgets(filter);
+
     res.set("X-Total-Count", budgets.length.toString());
     res.status(200).json(budgets);
   } catch (error) {

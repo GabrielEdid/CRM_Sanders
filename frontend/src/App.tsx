@@ -1,13 +1,16 @@
+// src/App.tsx
 import {
   Admin,
   Resource,
   ListGuesser,
   EditGuesser,
+  CustomRoutes,
   defaultLightTheme,
   defaultDarkTheme,
 } from "react-admin";
 import { deepmerge } from "@mui/utils";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route as ReactRouterRoute } from "react-router-dom";
 
 import Layout from "./layout/Layout";
 import Landing from "./Landing";
@@ -16,10 +19,11 @@ import donations from "./donations";
 import budgets from "./budgets";
 import jsonServerProvider from "ra-data-json-server";
 import authProvider from "./authProvider";
-import CustomLogin from "./CustomLogin"; // Import the custom login page
-import DonationSuccess from "./DonationSuccess"; // Import the success page
-import DonationCancel from "./DonationCancel"; // Import the cancel page
+import CustomLogin from "./CustomLogin";
+import DonationSuccess from "./DonationSuccess";
+import DonationCancel from "./DonationCancel";
 import { i18nProvider } from "./i18nprovider";
+import Dashboard from "./dashboard/Dashboard";
 
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
@@ -32,7 +36,6 @@ const App = () => (
       <Route path="/" element={<Landing />} />
       <Route path="/register" element={<div>Hola</div>} />
       <Route path="/donate" element={<div>Haz tu donativo!!</div>} />
-
       <Route path="/donation-success" element={<DonationSuccess />} />
       <Route path="/donation-canceled" element={<DonationCancel />} />
 
@@ -47,8 +50,13 @@ const App = () => (
             i18nProvider={i18nProvider}
             darkTheme={darkTheme}
             defaultTheme="light"
-            loginPage={CustomLogin} // Use the custom login page here
+            loginPage={CustomLogin}
           >
+            {/* Agregar rutas personalizadas */}
+            <CustomRoutes>
+              <ReactRouterRoute path="/dashboard" element={<Dashboard />} />
+            </CustomRoutes>
+
             <Resource
               name="users"
               list={ListGuesser}

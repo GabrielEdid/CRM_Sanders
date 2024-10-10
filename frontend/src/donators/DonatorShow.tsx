@@ -53,10 +53,10 @@ const DonatorShowContent = () => {
   return (
     <Box mt={2} display="flex">
       <Box flex="1">
-        <Card>
+        <Card variant="outlined">
           <CardContent>
-            <Box display="flex" mb={1} alignItems="center">
-              <Typography variant="h5" ml={2} flex="1">
+            <Box display="flex" mb={2} alignItems="center">
+              <Typography variant="h5" ml={2} flex="1" fontWeight="bold">
                 {record.name}
               </Typography>
               <EditButton label="Editar" sx={{ marginLeft: "auto" }} />
@@ -97,7 +97,6 @@ const DonatorShowContent = () => {
                       label="Ordenar"
                       fields={["createdAt", "amount"]}
                     />
-
                     <CreateRelatedDonationButton />
                   </Stack>
                   <DonationsIterator />
@@ -126,6 +125,7 @@ const DonationsIterator = () => {
             component={RouterLink}
             to={`/donations/${donation.id}/show`}
             state={{ from: location.pathname }}
+            sx={{ borderBottom: "1px solid #E0E0E0" }} // Add a subtle border between items
           >
             <ListItemText
               primary={
@@ -133,7 +133,11 @@ const DonationsIterator = () => {
                   Monto: ${donation.amount.toFixed(2)}
                 </Typography>
               }
-              secondary={donation.message}
+              secondary={
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {donation.message}
+                </Typography>
+              }
             />
             <ListItemSecondaryAction
               sx={{ display: "flex", alignItems: "flex-start" }}
@@ -163,6 +167,7 @@ const CreateRelatedDonationButton = () => {
       color="primary"
       size="small"
       startIcon={<PersonAddIcon />}
+      variant="contained" // Use contained button for better emphasis
     >
       Agregar Donación
     </Button>
