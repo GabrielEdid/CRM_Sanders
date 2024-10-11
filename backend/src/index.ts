@@ -27,12 +27,10 @@ const PORT = process.env.PORT || 5001;
 // Habilitar CORS para el frontend específico
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow only the frontend at this origin
+    origin: process.env.FRONTEND_URL, // Allow only the frontend at this origin
     exposedHeaders: ["X-Total-Count"], // Exponer el encabezado X-Total-Count
   })
 );
-
-app.use("/webhook", webhookRouter);
 
 // Conexión a mongoDB
 mongoose
@@ -43,6 +41,11 @@ mongoose
 // Middleware para parsear las solicitudes JSON
 app.use(express.json());
 
+// app.get("/", (req, res) => {
+//   res.send("Hello World - TC2007B!"); // Mensaje que se verá en la ventana del navegador
+// });
+
+app.use("/webhook", webhookRouter);
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/donators", donatorsRouter);
@@ -58,17 +61,17 @@ app.get("/", (req: Request, res: Response) => {
 // Configuración de HTTPS
 
 // Cargar los certificados SSL
-// const privateKey = fs.readFileSync("../certs/server.key", "utf8"); // Lee la llave privada del servidor desde el sistema de archivos
-// const certificate = fs.readFileSync("../certs/server.crt", "utf8"); // Lee el certificado público del servidor desde el sistema de archivos
-// const ca = fs.readFileSync("../certs/ca.crt", "utf8"); // Lee el certificado raíz de la CA desde el sistema de archivos
+const privateKey = fs.readFileSync("../certs/server.key", "utf8"); // Lee la llave privada del servidor desde el sistema de archivos
+const certificate = fs.readFileSync("../certs/server.crt", "utf8"); // Lee el certificado público del servidor desde el sistema de archivos
+const ca = fs.readFileSync("../certs/ca.crt", "utf8"); // Lee el certificado raíz de la CA desde el sistema de archivos
 
 // Configuración de las credenciales SSL para el servidor HTTPS
-// const credentials = { key: privateKey, cert: certificate, ca: ca };
+const credentials = { key: privateKey, cert: certificate, ca: ca };
 
 // Inicia el servidor HTTPS
-// https.createServer(credentials, app).listen(PORT, () => {
-//  console.log(`Server running on https://localhost:${PORT}`); // Mensaje de confirmación con el protocolo HTTPS
-// });
+https.createServer(credentials, app).listen(PORT, () => {
+  console.log(`Server running on ${process.env.API_URL}`); // Mensaje de confirmación con el protocolo HTTPS
+});
 
 // Inicia el servidor en HTTP escuchando en el puerto especificado
-app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+// app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
