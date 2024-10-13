@@ -28,14 +28,14 @@ import Dashboard from "./dashboard/Dashboard";
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
-const dataProvider = jsonServerProvider(`http://localhost:5001/api/v1`);
+const dataProvider = jsonServerProvider(
+  `${import.meta.env.VITE_API_URL}/api/v1`
+);
 
 const App = () => (
   <Router>
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route path="/register" element={<div>Hola</div>} />
-      <Route path="/donate" element={<div>Haz tu donativo!!</div>} />
       <Route path="/donation-success" element={<DonationSuccess />} />
       <Route path="/donation-canceled" element={<DonationCancel />} />
 

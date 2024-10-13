@@ -37,7 +37,7 @@ const Landing = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5001/api/v1/stripe/checkout", // Backend endpoint
+        `${import.meta.env.VITE_API_URL}/api/v1/stripe/checkout`, // Backend endpoint
         {
           method: "POST",
           headers: {
