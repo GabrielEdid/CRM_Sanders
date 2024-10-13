@@ -84,6 +84,11 @@ const getDonator = async (
 ) => {
   if (typeof queryOrId === "string") {
     const donator = await DonatorModel.findById(queryOrId, {}, options);
+
+    if (!donator) {
+      return null;
+    }
+
     const jsonDonator = {
       ...donator,
       id: donator?._id,
@@ -92,6 +97,11 @@ const getDonator = async (
     return jsonDonator;
   } else {
     const donator = await DonatorModel.findOne(queryOrId, {}, options);
+
+    if (!donator) {
+      return null;
+    }
+
     const jsonDonator = {
       ...donator,
       id: donator?._id,

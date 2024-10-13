@@ -20,8 +20,8 @@ export type Donator = {
 export type Budget = {
   id: string;
   title: string;
-  totalAmountInCentsMXN: number;
-  collectedAmountInCentsMXN: number;
+  totalAmount: number;
+  collectedAmount: number;
   description: string;
   startDate: Date;
   endDate: Date;

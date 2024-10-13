@@ -3,6 +3,8 @@ import DonationModel from "../schemas/Donation";
 import DonatorModel from "../schemas/Donator";
 import Stripe from "stripe";
 import { createDonation } from "./donations";
+import BudgetModel from "../schemas/Budget";
+import { ObjectId } from "mongoose";
 
 // Handle Stripe Webhook events
 export const handleStripeWebhook = async (req: Request, res: Response) => {
@@ -55,12 +57,42 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
         { new: true, upsert: true } // Create new donator if not found
       );
 
+      const currentDate = new Date();
+      const activeBudgets = await BudgetModel.find({
+        endDate: { $gte: currentDate },
+      }).sort({ endDate: 1 });
+
+      let selectedBudget = null;
+      const donationAmount = session.amount_total
+        ? session.amount_total / 100
+        : 0;
+
+      // Iterate through each active budget
+      for (const budget of activeBudgets) {
+        // Calculate the collected amount for the current budget
+        const collectedAmount = await DonationModel.aggregate([
+          { $match: { budgetId: budget._id } }, // Match donations related to the budget
+          { $group: { _id: null, totalCollected: { $sum: "$amount" } } }, // Sum all donations
+        ]);
+
+        const totalCollected = collectedAmount[0]?.totalCollected || 0;
+
+        // Check if the budget is not fully funded
+        if (totalCollected + donationAmount <= budget.totalAmount) {
+          selectedBudget = budget;
+          break; // Stop as soon as we find the closest eligible budget
+        }
+      }
+
       // Create a new donation entry
       const newDonation = await createDonation({
         donator: donator.id,
-        amount: session.amount_total ? session.amount_total / 100 : 0,
+        amount: donationAmount,
         paymentMethod: "stripe",
         message: "Donación completada a través de Stripe.",
+        budgetId: selectedBudget
+          ? (selectedBudget._id as ObjectId).toString()
+          : undefined,
       });
 
       console.log("Donation saved:", newDonation);

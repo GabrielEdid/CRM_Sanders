@@ -54,6 +54,7 @@ const createDonatorHandler = async (
 ) => {
   try {
     const { email } = req.body;
+    console.log(email);
     const existingDonator = await getDonator({ email });
 
     if (existingDonator) {

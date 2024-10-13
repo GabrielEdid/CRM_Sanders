@@ -9,16 +9,21 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  Avatar,
 } from "@mui/material";
 
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 import {
   ShowBase,
   TabbedShowLayout,
   useShowContext,
   EditButton,
-  SortButton,
   useListContext,
   RecordContextProvider,
   ReferenceManyField,
@@ -49,30 +54,48 @@ const DonatorShowContent = () => {
   if (isLoading || !record) return null;
 
   return (
-    <Box mt={2} display="flex">
-      <Box flex="1">
-        <Card variant="outlined">
+    <Box mt={2} display="flex" justifyContent="center">
+      <Box width="90%" maxWidth="900px">
+        <Card elevation={3} sx={{ borderRadius: "12px" }}>
           <CardContent>
-            <Box display="flex" mb={2} alignItems="center">
-              <Typography variant="h5" ml={2} flex="1" fontWeight="bold">
+            <Box display="flex" alignItems="center" mb={2}>
+              <Typography variant="h4" fontWeight="bold">
                 {record.name}
               </Typography>
               <EditButton label="Editar" sx={{ marginLeft: "auto" }} />
             </Box>
-
             <TabbedShowLayout>
               <TabbedShowLayout.Tab label="Detalles">
                 <Stack spacing={2} p={2}>
                   <Typography variant="body1">
                     <strong>Nombre:</strong> {record.name}
                   </Typography>
-                  <Typography variant="body1">
-                    <strong>Correo:</strong> {record.email}
+                  <Typography
+                    variant="body1"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <EmailIcon sx={{ mr: 1 }} /> <strong>Correo:</strong>{" "}
+                    {record.email}
                   </Typography>
-                  <Typography variant="body1">
-                    <strong>Número de Teléfono:</strong> {record.phone}
+                  <Typography
+                    variant="body1"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <PhoneIcon sx={{ mr: 1 }} />{" "}
+                    <strong>Número de Teléfono: </strong> {record.phone}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography
+                    variant="body1"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    {record.isSendEmails ? (
+                      <CheckCircleIcon sx={{ mr: 1, color: "green" }} />
+                    ) : (
+                      <CancelIcon sx={{ mr: 1, color: "red" }} />
+                    )}
                     <strong>Recibe emails de Marketing:</strong>{" "}
                     {record.isSendEmails ? "Sí" : "No"}
                   </Typography>
@@ -90,11 +113,8 @@ const DonatorShowContent = () => {
                     justifyContent="flex-end"
                     spacing={2}
                     mt={1}
+                    mb={2}
                   >
-                    <SortButton
-                      label="Ordenar"
-                      fields={["createdAt", "amount"]}
-                    />
                     <CreateRelatedDonationButton />
                   </Stack>
                   <DonationsIterator />
@@ -123,8 +143,17 @@ const DonationsIterator = () => {
             component={RouterLink}
             to={`/donations/${donation.id}/show`}
             state={{ from: location.pathname }}
-            sx={{ borderBottom: "1px solid #E0E0E0" }} // Add a subtle border between items
+            sx={{
+              borderBottom: "1px solid #E0E0E0",
+              "&:hover": { backgroundColor: "#f5f5f5" },
+              borderRadius: "8px",
+              padding: "16px",
+              marginBottom: "8px",
+            }}
           >
+            <Avatar sx={{ bgcolor: "#4caf50", mr: 2 }}>
+              <MonetizationOnIcon />
+            </Avatar>
             <ListItemText
               primary={
                 <Typography variant="body1" sx={{ fontWeight: "bold" }}>
@@ -137,14 +166,8 @@ const DonationsIterator = () => {
                 </Typography>
               }
             />
-            <ListItemSecondaryAction
-              sx={{ display: "flex", alignItems: "flex-start" }}
-            >
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="span"
-              >
+            <ListItemSecondaryAction>
+              <Typography variant="body2" color="textSecondary">
                 {formatDate(donation.createdAt)}
               </Typography>
             </ListItemSecondaryAction>
@@ -163,9 +186,19 @@ const CreateRelatedDonationButton = () => {
       to="/donations/create"
       state={donator ? { record: { donator: donator.id } } : undefined}
       color="primary"
-      size="small"
+      size="medium"
       startIcon={<PersonAddIcon />}
-      variant="contained" // Use contained button for better emphasis
+      variant="contained"
+      sx={{
+        fontWeight: "bold",
+        textTransform: "none",
+        borderRadius: "8px",
+        padding: "8px 16px",
+        bgcolor: "#1976d2", // vibrant color for emphasis
+        "&:hover": {
+          backgroundColor: "#115293",
+        },
+      }}
     >
       Agregar Donación
     </Button>

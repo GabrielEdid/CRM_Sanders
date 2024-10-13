@@ -2,8 +2,7 @@ import mongoose, { Schema, Document, model } from "mongoose";
 
 export interface BudgetInput {
   title: string;
-  totalAmountInCentsMXN: number;
-  collectedAmountInCentsMXN: number;
+  totalAmount: number;
   description: string;
   startDate: Date;
   endDate: Date;
@@ -19,13 +18,8 @@ const budgetSchema = new Schema({
     type: String,
     required: true,
   },
-  totalAmountInCentsMXN: {
+  totalAmount: {
     type: Number,
-    required: true,
-  },
-  collectedAmountInCentsMXN: {
-    type: Number,
-    default: 0,
     required: true,
   },
   description: {

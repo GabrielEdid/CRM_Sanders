@@ -13,7 +13,6 @@ export const BudgetEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img src="./img/empty.svg" alt="Presupuestos no encontrados" />
       <Stack gap={0} alignItems="center">
         <Typography variant="h6" fontWeight="bold">
           No se han encontrado presupuestos

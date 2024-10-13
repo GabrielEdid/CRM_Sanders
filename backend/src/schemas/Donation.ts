@@ -4,6 +4,7 @@ import { DonatorDocument } from "./Donator";
 // In schemas/Donation.ts
 export interface DonationInput {
   donator?: string;
+  budgetId?: string;
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
   message?: string;
@@ -11,6 +12,7 @@ export interface DonationInput {
 
 export interface IDonation extends Document {
   donator: mongoose.Schema.Types.ObjectId;
+  budget?: mongoose.Schema.Types.ObjectId;
   amount: number;
   paymentMethod: "stripe" | "cash" | "transfer";
   message?: string;
@@ -27,6 +29,10 @@ const donationSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Donator",
     required: true,
+  },
+  budgetId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Budget",
   },
   amount: {
     type: Number,

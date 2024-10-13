@@ -7,16 +7,12 @@ const payload = {
         required_error: "El título  es requerido",
       })
       .min(1, "El título tiene que tener al menos 1 caracter"),
-    totalAmountInCentsMXN: z
+    totalAmount: z
       .number({
         required_error: "El monto es obligatorio",
       })
       .positive(),
-    collectedAmountInCentsMXN: z
-      .number({
-        invalid_type_error: "El monto tiene que ser un número",
-      })
-      .default(0),
+
     description: z
       .string({
         required_error: "La descripción  es requerida",

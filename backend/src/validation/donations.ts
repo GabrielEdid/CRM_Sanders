@@ -13,6 +13,7 @@ const payload = {
       .min(1, "El mensaje debe tener al menos un carácter")
       .optional(),
     donator: z.string({ required_error: "El donador es obligatorio" }),
+    budgetId: z.string().optional(),
   }),
 };
 

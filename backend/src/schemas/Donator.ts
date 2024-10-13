@@ -4,7 +4,7 @@ export interface DonatorInput {
   name: string;
   email: string;
   phone: string;
-  isSendEmails: boolean;
+  isSendEmails?: boolean;
 }
 
 export interface DonatorDocument extends DonatorInput, mongoose.Document {

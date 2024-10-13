@@ -13,7 +13,6 @@ export const DonationEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img src="./img/empty.svg" alt="Donaciones no encontradas" />
       <Stack gap={0} alignItems="center">
         <Typography variant="h6" fontWeight="bold">
           No se han encontrado donaciones

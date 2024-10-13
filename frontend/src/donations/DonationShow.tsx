@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Typography, Chip } from "@mui/material";
+import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import { ShowBase, useShowContext, EditButton } from "react-admin";
 import { Donation } from "../types";
 import { format } from "date-fns";

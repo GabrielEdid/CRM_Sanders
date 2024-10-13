@@ -23,19 +23,15 @@ export const BudgetShow = () => (
 const BudgetShowContent = () => {
   const { record, isLoading } = useShowContext<Budget>();
 
+  console.log(record);
+
   if (isLoading || !record) return null;
 
   // Calculate the progress percentage
   const progressPercentage =
-    (record.collectedAmountInCentsMXN / record.totalAmountInCentsMXN) * 100;
-
-  // Format currency amounts
-  const formatCurrency = (amountInCents: number) => {
-    return (amountInCents / 100).toLocaleString("es-MX", {
-      style: "currency",
-      currency: "MXN",
-    });
-  };
+    record.totalAmount > 0
+      ? (record.collectedAmount / record.totalAmount) * 100
+      : 0;
 
   // Format dates with date-fns
   const formatDate = (date: Date) =>
@@ -67,8 +63,7 @@ const BudgetShowContent = () => {
                   sx={{ height: 10, borderRadius: 5, mt: 1 }}
                 />
                 <Typography variant="caption" color="textSecondary" mt={1}>
-                  {formatCurrency(record.collectedAmountInCentsMXN)} /{" "}
-                  {formatCurrency(record.totalAmountInCentsMXN)}
+                  ${record.collectedAmount} / ${record.totalAmount}
                 </Typography>
               </Box>
 

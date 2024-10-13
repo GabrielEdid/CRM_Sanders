@@ -7,35 +7,36 @@ import {
   required,
 } from "react-admin";
 
+const validateRequired = required("Este campo es obligatorio");
+
 export const DonationInputs = () => {
   return (
-    <Stack>
-      <Stack>
-        <Stack>
-          <NumberInput
-            source="amount"
-            validate={required()}
-            helperText={false}
-            label="Monto"
-          />
-          <SelectInput
-            source="paymentMethod"
-            label="Método de pago"
-            validate={required()}
-            choices={[
-              { id: "stripe", name: "Tarjeta de Crédito/Débito" },
-              { id: "cash", name: "Efectivo" },
-              { id: "transfer", name: "Transferencia" },
-            ]}
-          />
-          <TextInput source="message" multiline fullWidth label="Mensaje" />
-          <ReferenceInput
-            source="donator"
-            reference="donators"
-            label="Donador"
-          />
-        </Stack>
-      </Stack>
+    <Stack spacing={3}>
+      {" "}
+      {/* Adjusted spacing for better readability */}
+      <NumberInput
+        source="amount"
+        validate={validateRequired}
+        helperText={false}
+        label="Monto"
+      />
+      <SelectInput
+        source="paymentMethod"
+        label="Método de pago"
+        validate={validateRequired}
+        choices={[
+          { id: "stripe", name: "Tarjeta de Crédito/Débito" },
+          { id: "cash", name: "Efectivo" },
+          { id: "transfer", name: "Transferencia" },
+        ]}
+      />
+      <TextInput source="message" multiline fullWidth label="Mensaje" />
+      <ReferenceInput source="donator" reference="donators" label="Donador" />
+      <ReferenceInput
+        source="budgetId"
+        reference="budgets"
+        label="Presupuesto"
+      />
     </Stack>
   );
 };

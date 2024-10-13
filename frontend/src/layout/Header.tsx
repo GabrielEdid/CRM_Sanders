@@ -16,7 +16,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { Link, useLocation, matchPath } from "react-router-dom";
@@ -127,25 +126,6 @@ const Header = () => {
                 backgroundColor:
                   currentPath === "/dashboard" ? "#ffffff30" : "transparent",
                 color: currentPath === "/dashboard" ? "#ffffff" : "inherit",
-                borderRadius: 2,
-              }}
-            />
-
-            {/* Pestaña para Usuarios */}
-            <Tab
-              icon={<PeopleIcon />} // Agregar ícono
-              label="Users"
-              component={Link}
-              to="/users"
-              value="/users"
-              iconPosition="start"
-              sx={{
-                textTransform: "none",
-                fontSize: { xs: 14, sm: 18, md: 22 },
-                padding: { xs: "6px", sm: "8px", md: "12px" },
-                backgroundColor:
-                  currentPath === "/users" ? "#ffffff30" : "transparent",
-                color: currentPath === "/users" ? "#ffffff" : "inherit",
                 borderRadius: 2,
               }}
             />
