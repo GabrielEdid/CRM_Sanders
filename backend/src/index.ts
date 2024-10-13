@@ -32,11 +32,26 @@ app.use(
   })
 );
 
+// solo permitir solicitudes del frontend
+// app.use((req, res, next) => {
+//   const allowedOrigin = process.env.FRONTEND_URL;
+//   const requestOrigin = req.headers.origin;
+
+//   if (requestOrigin !== allowedOrigin) {
+//     return res
+//       .status(403)
+//       .json({ message: "Acceso no permitido desde este origen" });
+//   }
+//   next();
+// });
+
 // Conexión a mongoDB
 mongoose
   .connect(process.env.MONGO_URI!)
   .then(() => console.log("MongoDB connected")) // Mensaje si la conexión es exitosa
   .catch((err) => console.log(err)); // Mensaje si ocurre un error en la conexión
+
+app.use("/webhook", webhookRouter);
 
 // Middleware para parsear las solicitudes JSON
 app.use(express.json());
@@ -45,7 +60,6 @@ app.use(express.json());
 //   res.send("Hello World - TC2007B!"); // Mensaje que se verá en la ventana del navegador
 // });
 
-app.use("/webhook", webhookRouter);
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/donators", donatorsRouter);
