@@ -157,7 +157,7 @@ const deleteDonationHandler = async (req: Request, res: Response) => {
 
 const getTopDonatorsHandler = async (req: Request, res: Response) => {
   try {
-    const topDonators = await Donation.aggregate([
+    let topDonators = await Donation.aggregate([
       {
         $group: {
           _id: "$donator",
@@ -192,6 +192,11 @@ const getTopDonatorsHandler = async (req: Request, res: Response) => {
       },
     ]);
 
+    topDonators = topDonators.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
+    res.set("X-Total-Count", topDonators.length.toString());
     res.status(200).json(topDonators);
   } catch (error) {
     console.error(error);
@@ -393,8 +398,12 @@ const getDonationTrendHandler = async (req: Request, res: Response) => {
     });
 
     // Ejecutar la agregación
-    const donationTrend = await Donation.aggregate(pipeline);
-
+    let donationTrend = await Donation.aggregate(pipeline);
+    donationTrend = donationTrend.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
+    res.set("X-Total-Count", donationTrend.length.toString());
     res.status(200).json(donationTrend);
   } catch (error) {
     console.error(error);
@@ -465,7 +474,7 @@ const getPaymentMethodDistributionHandler = async (
   res: Response
 ) => {
   try {
-    const paymentMethodDistribution = await Donation.aggregate([
+    let paymentMethodDistribution = await Donation.aggregate([
       {
         $group: {
           _id: "$paymentMethod",
@@ -482,13 +491,89 @@ const getPaymentMethodDistributionHandler = async (
         },
       },
     ]);
-
+    paymentMethodDistribution = paymentMethodDistribution.map(
+      (item, index) => ({
+        id: item.paymentMethod,
+        ...item,
+      })
+    );
+    res.set("X-Total-Count", paymentMethodDistribution.length.toString());
     res.status(200).json(paymentMethodDistribution);
   } catch (error) {
     console.error(error);
     res
       .status(500)
       .json({ message: "Error al obtener la distribución de métodos de pago" });
+  }
+};
+
+const getDonationsByMonthHandler = async (req: Request, res: Response) => {
+  try {
+    // Obtener la fecha actual y la fecha de hace un año
+    const now = new Date();
+    const lastYear = new Date();
+    lastYear.setFullYear(now.getFullYear() - 1);
+
+    // Pipeline de agregación
+    const donationsByMonth = await Donation.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: lastYear, $lte: now },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          totalAmount: { $sum: "$amount" },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: "$_id.year",
+          month: "$_id.month",
+          totalAmount: 1,
+        },
+      },
+    ]);
+
+    // Generar un array con los últimos 12 meses
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      months.unshift({
+        year: date.getFullYear(),
+        month: date.getMonth() + 1, // Los meses en JavaScript son de 0 a 11
+      });
+    }
+
+    // Completar los datos para meses sin donaciones
+    const donationsByMonthComplete = months.map(({ year, month }, index) => {
+      const donation = donationsByMonth.find(
+        (d) => d.year === year && d.month === month
+      );
+      return {
+        id: index,
+        year,
+        month,
+        totalAmount: donation ? donation.totalAmount : 0,
+      };
+    });
+
+    res.set("X-Total-Count", donationsByMonthComplete.length.toString());
+    res.status(200).json(donationsByMonthComplete);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener las donaciones por mes" });
   }
 };
 
@@ -503,4 +588,5 @@ export {
   getDonationTrendHandler,
   getRecurringVsUniqueDonationsHandler,
   getPaymentMethodDistributionHandler,
+  getDonationsByMonthHandler,
 };

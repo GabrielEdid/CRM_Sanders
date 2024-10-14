@@ -27,10 +27,7 @@ donationsRouter.get(
   "/recurring-vs-unique",
   getRecurringVsUniqueDonationsHandler
 );
-donationsRouter.get(
-  "/payment-method-distribution",
-  getPaymentMethodDistributionHandler
-);
+donationsRouter.get("/payment-methods", getPaymentMethodDistributionHandler);
 donationsRouter.get("/", getDonationsHandler);
 donationsRouter.get("/:id", getDonationHandler);
 donationsRouter.post(

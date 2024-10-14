@@ -23,7 +23,13 @@ export const BudgetShow = () => (
 const BudgetShowContent = () => {
   const { record, isLoading } = useShowContext<Budget>();
 
-  console.log(record);
+  // Format currency amounts
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString("es-MX", {
+      style: "currency",
+      currency: "MXN",
+    });
+  };
 
   if (isLoading || !record) return null;
 
@@ -63,7 +69,8 @@ const BudgetShowContent = () => {
                   sx={{ height: 10, borderRadius: 5, mt: 1 }}
                 />
                 <Typography variant="caption" color="textSecondary" mt={1}>
-                  ${record.collectedAmount} / ${record.totalAmount}
+                  {formatCurrency(record.collectedAmount)} /
+                  {formatCurrency(record.totalAmount)}
                 </Typography>
               </Box>
 

@@ -18,6 +18,12 @@ import { budgetsRouter } from "./routes/budgets";
 import { stripeRouter } from "./routes/stripe";
 import { webhookRouter } from "./routes/webhook"; // Import the new webhook router
 import { articlesRouter } from "./routes/articles";
+import {
+  getDonationsByMonthHandler,
+  getDonationTrendHandler,
+  getPaymentMethodDistributionHandler,
+  getTopDonatorsHandler,
+} from "./controllers/donations";
 
 // Crea la aplicación de Express
 const app = express();
@@ -59,6 +65,14 @@ app.use(express.json());
 // app.get("/", (req, res) => {
 //   res.send("Hello World - TC2007B!"); // Mensaje que se verá en la ventana del navegador
 // });
+
+app.get(
+  "/api/v1/paymentMethodDistribution",
+  getPaymentMethodDistributionHandler
+);
+app.get("/api/v1/topDonators", getTopDonatorsHandler);
+app.get("/api/v1/donationTrends", getDonationTrendHandler);
+app.get("/api/v1/donationsByMonth", getDonationsByMonthHandler);
 
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);

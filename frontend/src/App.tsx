@@ -10,7 +10,6 @@ import {
 } from "react-admin";
 import { deepmerge } from "@mui/utils";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Route as ReactRouterRoute } from "react-router-dom";
 
 import Layout from "./layout/Layout";
 import Landing from "./Landing";
@@ -23,7 +22,7 @@ import CustomLogin from "./CustomLogin";
 import DonationSuccess from "./DonationSuccess";
 import DonationCancel from "./DonationCancel";
 import { i18nProvider } from "./i18nprovider";
-import Dashboard from "./dashboard/Dashboard";
+import DashboardList from "./dashboard/DashboardList";
 
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
@@ -53,9 +52,9 @@ const App = () => (
             loginPage={CustomLogin}
           >
             {/* Agregar rutas personalizadas */}
-            <CustomRoutes>
+            {/* <CustomRoutes>
               <ReactRouterRoute path="/dashboard" element={<Dashboard />} />
-            </CustomRoutes>
+            </CustomRoutes> */}
 
             <Resource
               name="users"
@@ -77,6 +76,11 @@ const App = () => (
               name="budgets"
               {...budgets}
               options={{ label: "Presupuestos" }}
+            />
+            <Resource
+              name="dashboard"
+              list={DashboardList}
+              options={{ label: "Métodos de Pago" }}
             />
           </Admin>
         }
