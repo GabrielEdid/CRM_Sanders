@@ -66,7 +66,6 @@ const authProvider: AuthProvider = {
       : Promise.reject({ message: "login.required" }),
   logout: (params?: any) => {
     localStorage.removeItem("auth");
-    // window.location.href = "/";
     return Promise.resolve();
   },
   getIdentity: () => {

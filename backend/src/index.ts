@@ -73,7 +73,6 @@ app.get(
 app.get("/api/v1/topDonators", getTopDonatorsHandler);
 app.get("/api/v1/donationTrends", getDonationTrendHandler);
 app.get("/api/v1/donationsByMonth", getDonationsByMonthHandler);
-
 app.use("/api/v1/donations", donationsRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/donators", donatorsRouter);
