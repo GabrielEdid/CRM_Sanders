@@ -4,7 +4,6 @@ import {
   Resource,
   ListGuesser,
   EditGuesser,
-  CustomRoutes,
   defaultLightTheme,
   defaultDarkTheme,
 } from "react-admin";
@@ -16,20 +15,21 @@ import Landing from "./Landing";
 import donators from "./donators";
 import donations from "./donations";
 import budgets from "./budgets";
-import jsonServerProvider from "ra-data-json-server";
+// import jsonServerProvider from "ra-data-json-server";
 import authProvider from "./authProvider";
 import CustomLogin from "./CustomLogin";
 import DonationSuccess from "./DonationSuccess";
 import DonationCancel from "./DonationCancel";
 import { i18nProvider } from "./i18nprovider";
 import DashboardList from "./dashboard/DashboardList";
+import dataProvider from "./dataProvider";
 
 const lightTheme = defaultLightTheme;
 const darkTheme = deepmerge(defaultDarkTheme, { palette: { mode: "dark" } });
 
-const dataProvider = jsonServerProvider(
-  `${import.meta.env.VITE_API_URL}/api/v1`
-);
+// const dataProvider = jsonServerProvider(
+//   `${import.meta.env.VITE_API_URL}/api/v1`
+// );
 
 const App = () => (
   <Router>

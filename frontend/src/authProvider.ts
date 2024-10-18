@@ -1,35 +1,6 @@
 import { AuthProvider } from "react-admin";
 
 const authProvider: AuthProvider = {
-  register: ({
-    username,
-    password,
-  }: {
-    username: string;
-    password: string;
-  }) => {
-    const request = new Request(
-      import.meta.env.VITE_API_URL + "/api/v1/users/register",
-      {
-        method: "POST",
-        body: JSON.stringify({ username, password }),
-        headers: new Headers({ "Content-Type": "application/json" }),
-      }
-    );
-    return fetch(request)
-      .then((response) => {
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((auth) => {
-        localStorage.setItem("auth", JSON.stringify(auth));
-      })
-      .catch(() => {
-        throw new Error("Network error");
-      });
-  },
   login: ({ username, password }) => {
     const apiUrl = import.meta.env.VITE_API_URL; //
     const request = new Request(apiUrl + "/api/v1/users/login", {

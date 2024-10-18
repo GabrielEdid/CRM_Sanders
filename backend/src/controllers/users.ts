@@ -10,9 +10,10 @@ import {
 import { Request, Response } from "express";
 
 import { CreateUserInput } from "../validation/users";
-const secretKey = process.env.SECRET_KEY || "";
 
 const bcrypt = require("bcrypt");
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const getUsersHandler = async (req: Request, res: Response) => {
   try {
@@ -52,7 +53,9 @@ const loginHandler = async (req: Request, res: Response) => {
       const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (passwordMatch) {
-        const token = jwt.sign({ username }, secretKey!, { expiresIn: "24h" });
+        const token = jwt.sign({ username }, SECRET_KEY!, {
+          expiresIn: "24h",
+        });
         const tokenJson = {
           token: token,
           username: user.username,
@@ -77,15 +80,26 @@ const verifyToken = (
   res: Response,
   next: any
 ) => {
-  const header = req.header("Authorization") || "";
-  const token = header.split(" ")[1];
+  const token = req.headers.authorization;
+  console.log("token:", token);
+  console.log("req.headers:", req.headers);
+
   if (!token) {
     return res.status(401).json({ message: "Token not provied" });
   }
   try {
-    const payload = jwt.verify(token, secretKey!) as jwt.JwtPayload;
-    req.username = payload.username;
-    next();
+    const payload = jwt.verify(
+      token.split(" ")[1],
+      SECRET_KEY!,
+      (err, decoded) => {
+        if (err) {
+          console.log("err:", err);
+          return res.status(403).json({ error: "Token inválido" });
+        } else {
+          next();
+        }
+      }
+    );
   } catch (error) {
     return res.status(403).json({ message: "Token not valid" });
   }
@@ -147,4 +161,5 @@ export {
   updateUserHandler,
   deleteUserHandler,
   loginHandler,
+  verifyToken,
 };

@@ -50,18 +50,11 @@ const PAYMENT_METHOD_COLORS: { [key: string]: string } = {
   default: "#7c1810",
 };
 
-// Mapeo de colores para Donadores Únicos vs Recurrentes
-const DONATOR_TYPE_COLORS: { [key: string]: string } = {
-  "Donadores Únicos": "#FF6347", // Tomato
-  "Donadores Recurrentes": "#32CD32", // LimeGreen
-};
-
 const DashboardList: React.FC = (props) => {
   const [paymentData, setPaymentData] = useState<any[]>([]);
   const [trendData, setTrendData] = useState<any[]>([]);
   const [topDonatorsData, setTopDonatorsData] = useState<any[]>([]);
   const [donationsByMonthData, setDonationsByMonthData] = useState<any[]>([]);
-  const [uniqueVsRecurringData, setUniqueVsRecurringData] = useState<any[]>([]); // Nuevo estado para Donadores Únicos vs Recurrentes
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -114,31 +107,6 @@ const DashboardList: React.FC = (props) => {
 
     fetchStats();
   }, [dataProvider]);
-
-  // Nuevo useEffect para obtener Donadores Únicos vs Recurrentes
-  useEffect(() => {
-    const fetchUniqueVsRecurring = async () => {
-      try {
-        const response = await fetch(
-          "https://localhost:5001/api/v1/donations/recurring-vs-unique"
-        );
-        if (!response.ok) {
-          throw new Error(
-            "Error al obtener las donaciones únicas vs recurrentes"
-          );
-        }
-        const data = await response.json();
-        setUniqueVsRecurringData([
-          { name: "Donadores Únicos", value: data.uniqueDonators },
-          { name: "Donadores Recurrentes", value: data.recurringDonators },
-        ]);
-      } catch (err: any) {
-        setError(err.message || "Error desconocido");
-      }
-    };
-
-    fetchUniqueVsRecurring();
-  }, []);
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -197,47 +165,6 @@ const DashboardList: React.FC = (props) => {
                     </Pie>
                     <Tooltip
                       formatter={(value: number) => `${value} donaciones`}
-                    />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Nueva Gráfica: Donadores Únicos vs. Recurrentes */}
-          <Card sx={{ flex: 1 }}>
-            <CardHeader title="Donadores Únicos vs. Recurrentes" />
-            <CardContent>
-              {uniqueVsRecurringData.length === 0 ? (
-                <Typography>
-                  No hay datos de donadores únicos y recurrentes para mostrar.
-                </Typography>
-              ) : (
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={uniqueVsRecurringData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      fill="#8884d8"
-                      label
-                    >
-                      {uniqueVsRecurringData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={
-                            DONATOR_TYPE_COLORS[entry.name] ||
-                            COLORS[index % COLORS.length]
-                          } // Color basado en el tipo de donador
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value: number) => `${value} donadores`}
                     />
                     <Legend />
                   </PieChart>
@@ -310,7 +237,7 @@ const DashboardList: React.FC = (props) => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="month"
-                    tickFormatter={(month, index) => {
+                    tickFormatter={(month) => {
                       const date = new Date();
                       date.setMonth(month - 1);
                       return date.toLocaleString("es-ES", { month: "short" });

@@ -24,6 +24,7 @@ import {
   getPaymentMethodDistributionHandler,
   getTopDonatorsHandler,
 } from "./controllers/donations";
+import { verifyToken } from "./controllers/users";
 
 // Crea la aplicación de Express
 const app = express();
@@ -35,6 +36,9 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL, // Allow only the frontend at this origin
     exposedHeaders: ["X-Total-Count"], // Exponer el encabezado X-Total-Count
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
@@ -70,13 +74,13 @@ app.get(
   "/api/v1/paymentMethodDistribution",
   getPaymentMethodDistributionHandler
 );
-app.get("/api/v1/topDonators", getTopDonatorsHandler);
-app.get("/api/v1/donationTrends", getDonationTrendHandler);
-app.get("/api/v1/donationsByMonth", getDonationsByMonthHandler);
-app.use("/api/v1/donations", donationsRouter);
+app.get("/api/v1/topDonators", verifyToken, getTopDonatorsHandler);
+app.get("/api/v1/donationTrends", verifyToken, getDonationTrendHandler);
+app.get("/api/v1/donationsByMonth", verifyToken, getDonationsByMonthHandler);
+app.use("/api/v1/donations", verifyToken, donationsRouter);
 app.use("/api/v1/users", usersRouter);
-app.use("/api/v1/donators", donatorsRouter);
-app.use("/api/v1/budgets", budgetsRouter);
+app.use("/api/v1/donators", verifyToken, donatorsRouter);
+app.use("/api/v1/budgets", verifyToken, budgetsRouter);
 app.use("/api/v1/stripe", stripeRouter);
 app.use("/api/v1/articles", articlesRouter);
 
